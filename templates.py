@@ -80,7 +80,8 @@ def home(site: dict, featured: list, groups: list) -> str:
 
     blocks = []
     for _, cn, items in groups:
-        body = "".join(_row(n, it, local=True) for n, it in enumerate(items, 1)) if items \
+        # 首页在站点根目录，链接必须带栏目前缀（与列表页的 local 链接相反）
+        body = "".join(_row(n, it) for n, it in enumerate(items, 1)) if items \
             else _empty("暂无内容。")
         blocks.append(f"""<section class="sec wrap">
   <div class="sec-head"><h2>{cn}</h2><span class="count">{len(items):02d} 篇</span></div>
