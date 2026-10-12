@@ -68,7 +68,7 @@ FIXED = {
     "about_bio_head": "简介",
     "about_info_head": "信息",
     "about_k_direction": "方向",
-    "about_v_direction": "关卡 / 战斗",
+    "about_v_direction": "关卡",
     "about_k_email": "邮箱",
     "about_k_wechat": "微信",
     # 父子文档（frontmatter 里的 parent 字段）

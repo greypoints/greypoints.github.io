@@ -64,7 +64,7 @@ about_info_head：信息
 # 信息栏第 1 行左边的标签
 about_k_direction：方向
 # 信息栏第 1 行右边的值
-about_v_direction：关卡 / 战斗
+about_v_direction：关卡
 # 信息栏第 2 行左边的标签
 about_k_email：邮箱
 # 信息栏第 3 行左边的标签
