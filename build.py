@@ -25,6 +25,7 @@ import templates as T
 ROOT = Path(__file__).resolve().parent
 CONTENT = ROOT / "content"
 OUT = ROOT / "docs"
+PAGES = CONTENT / "pages"   # 独立页面（如「项目经历」）
 
 # ─────────────────────────── 站点信息（改这里） ───────────────────────────
 
@@ -32,22 +33,37 @@ SITE = {
     "name_en": "GREYPOINT",
     "name_cn": "灰点",
     "role": "游戏策划",
-    "claim": "关卡 / 战斗方向 —— 这里存放我的拆解案与策划案。",
+    "claim": "关卡方向：我的拆解案与策划案。",
     "desc": "灰点的个人作品集：游戏关卡与战斗方向的拆解案、策划案存档。",
-    "email": "1255893073@qq.com",
-    "wechat": "（待填）",
+    "email": "18272287614@163.com",
+    "wechat": "Grey_spot",
     "root": "/",  # 站点根路径；若部署到子目录（如 /blog/）改成 "/blog/"
-    "bio": "<p>【待改写】这里写一段自我介绍：你的方向、做过什么、在找什么样的机会。"
-           "三四句即可，不要形容词堆砌。</p>",
+    "bio": "<p>来自中国传媒大学，",
 }
 
 # 栏目：目录名 → (中文名, 英文标签, 列表页导语)
 SECTIONS = {
-    "teardown": ("拆解案", "TEARDOWN", "把一款游戏拆到能复刻的程度：核心循环、系统构成、关卡节奏、感官反馈。"),
-    "design": ("策划案", "DESIGN DOC", "自己设计的方案：玩法结构、数值框架、关卡提案与实现取舍。"),
+    "teardown": ("拆解案", "TEARDOWN"),
+    "design": ("策划案", "DESIGN DOC"),
 }
 
+# 顶栏导航（顺序即显示顺序）；指向栏目目录的末尾要带 /
+NAV = [
+    ("", "首页"),
+    ("teardown/", "拆解案"),
+    ("design/", "策划案"),
+    ("projects.html", "项目"),
+    ("about.html", "关于"),
+]
+
 FEATURED_LIMIT = 3  # 首页精选条数
+
+
+def section_meta(tup) -> tuple:
+    """栏目配置允许两段（中文名 / 英文标签）或三段（再加列表页导语）"""
+    cn, en = tup[0], tup[1]
+    intro = tup[2] if len(tup) > 2 else ""
+    return cn, en, intro
 
 # ─────────────────────────── frontmatter ───────────────────────────
 
@@ -91,10 +107,101 @@ TAGS_RE = re.compile(r"<[^>]+>")
 def render_md(text: str):
     """渲染 Markdown → (html, toc 结构)"""
     MD.reset()
-    html = MD.convert(text)
+    html = MD.convert(autolink(text))
     toc = MD.toc_tokens
-    html = wrap_tables(mark_numeric_cols(mark_cjk_pre(html)))
+    html = embed_media(wrap_tables(mark_numeric_cols(mark_cjk_pre(html))))
     return html, toc
+
+
+# ─────────────── 裸网址自动成链接 + 视频 / 可玩站点自动内嵌 ───────────────
+
+# 行内出现的裸网址（排除已写成 Markdown 链接、尖括号、引号里的）
+URL_RE = re.compile(r'(?<![\w"\'<=\(\[/])(https?://[^\s<>()\[\]"\'，。；：、）】]+)')
+FENCE_RE = re.compile(r"^\s*(```|~~~)")
+
+
+def autolink(text: str) -> str:
+    """把 md 里光秃秃的网址变成可点链接（Markdown 原生的 <url> 形式）。
+    跳过代码块和缩进代码，避免破坏 ASCII 流程图。"""
+    out, in_fence = [], False
+    for line in text.splitlines():
+        if FENCE_RE.match(line):
+            in_fence = not in_fence
+            out.append(line)
+            continue
+        if in_fence or line.startswith("    "):
+            out.append(line)
+            continue
+
+        def wrap(m):
+            url = m.group(1).rstrip(".,;:!")
+            return f"<{url}>{m.group(1)[len(url):]}"
+
+        out.append(URL_RE.sub(wrap, line))
+    return "\n".join(out)
+
+
+BILI_RE = re.compile(r"https?://(?:www\.|m\.)?bilibili\.com/video/(BV[0-9A-Za-z]+|av\d+)")
+YT_RE = re.compile(r"https?://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]{6,})")
+VIMEO_RE = re.compile(r"https?://(?:www\.)?vimeo\.com/(\d+)")
+ITCH_RE = re.compile(r"https?://itch\.io/embed/(\d+)")
+MEDIA_FILE_RE = re.compile(r"https?://\S+\.(?:mp4|webm|ogg|ogv|mov)(?:\?\S*)?$", re.I)
+BLOCK_RE = re.compile(r"<(p|li)>(.*?)</\1>", re.S)
+A_RE = re.compile(r'<a href="([^"]+)"[^>]*>.*?</a>', re.S)
+
+# itch.io 作品页 → 可玩嵌入要用的 game id（取自作品页里的 data-game_id）
+# 想让某个作品页变成页内可玩窗口，把「域名/作品名: id」加到这里即可；
+# 或者直接在 md 里写 itch 的嵌入地址 https://itch.io/embed/<id>
+ITCH_IDS = {
+    "dshzsh.itch.io/azz": "2311370",
+}
+
+
+def _iframe(src: str, title: str, cls: str = "") -> str:
+    box = f"embed {cls}".strip()
+    return (f'<div class="{box}"><iframe src="{src}" title="{title}" loading="lazy" '
+            f'scrolling="no" frameborder="0" allowfullscreen '
+            f'allow="autoplay; fullscreen; picture-in-picture"></iframe></div>')
+
+
+def embed_for(url: str) -> str | None:
+    """能内嵌的地址 → 播放器 HTML；不能内嵌的返回 None（保持普通链接）"""
+    if m := BILI_RE.search(url):
+        vid = m.group(1)
+        key = f"aid={vid[2:]}" if vid.lower().startswith("av") else f"bvid={vid}"
+        return _iframe("https://player.bilibili.com/player.html?"
+                       f"{key}&autoplay=0&danmaku=0&high_quality=1", "B 站视频")
+    if m := YT_RE.search(url):
+        return _iframe(f"https://www.youtube.com/embed/{m.group(1)}", "YouTube 视频")
+    if m := VIMEO_RE.search(url):
+        return _iframe(f"https://player.vimeo.com/video/{m.group(1)}", "Vimeo 视频")
+    if m := ITCH_RE.search(url):
+        return _iframe(f"https://itch.io/embed/{m.group(1)}", "itch.io 作品卡", cls="embed-itch")
+    for host, gid in ITCH_IDS.items():
+        if host in url:
+            return _iframe(f"https://itch.io/embed/{gid}", "itch.io 作品卡", cls="embed-itch")
+    if MEDIA_FILE_RE.match(url):
+        return ('<div class="embed embed-file"><video controls preload="metadata" '
+                f'src="{url.replace(chr(34), "%22")}"></video></div>')
+    return None
+
+
+def embed_media(html: str) -> str:
+    """独立成段、或只带一句前缀的链接（段落或列表项），是视频/可嵌站点就换成播放器。
+    例如「作品展示：<bilibili 链接>」→ 保留「作品展示：」+ 内嵌播放器。"""
+    def fix(m):
+        inner = m.group(2)
+        links = A_RE.findall(inner)
+        if len(links) != 1 or "<" in A_RE.sub("", inner):
+            return m.group(0)
+        embed = embed_for(links[0])
+        if not embed:
+            return m.group(0)
+        prefix = A_RE.sub("", inner).strip()
+        label = f'<p class="embed-label">{prefix}</p>' if prefix else ""
+        return label + embed
+
+    return BLOCK_RE.sub(fix, html)
 
 
 def wrap_tables(html: str) -> str:
@@ -166,7 +273,8 @@ def stats(text: str) -> tuple[int, int]:
 def collect() -> dict:
     """扫描 content/ 下所有栏目，返回 item 列表（按 order → date 排序）"""
     items = []
-    for key, (cn, en, _) in SECTIONS.items():
+    for key, tup in SECTIONS.items():
+        cn, en, _ = section_meta(tup)
         folder = CONTENT / key
         if not folder.exists():
             continue
@@ -195,6 +303,27 @@ def collect() -> dict:
     return {"items": items}
 
 
+def collect_pages() -> list:
+    """content/pages/*.md → 独立页面（如「项目经历」），输出到 docs/<slug>.html"""
+    pages = []
+    if not PAGES.exists():
+        return pages
+    for path in sorted(PAGES.glob("*.md")):
+        meta, body = parse_front(path.read_text(encoding="utf-8"))
+        if truthy(meta.get("draft", "false")):
+            continue
+        pages.append({
+            "slug": meta.get("slug") or path.stem,
+            "title": meta.get("title") or path.stem,
+            "label": meta.get("label", ""),
+            "summary": meta.get("summary", ""),
+            "body": body,
+            "order": int(meta.get("order") or 999),
+        })
+    pages.sort(key=lambda p: (p["order"], p["slug"]))
+    return pages
+
+
 def _sort(items: list) -> None:
     """栏目顺序 → order 升序 → date 倒序（无 date 的排后面）"""
     rank = {k: i for i, k in enumerate(SECTIONS)}
@@ -220,7 +349,7 @@ def build() -> None:
     shutil.copy2(ROOT / "assets" / "favicon.svg", OUT / "assets" / "favicon.svg")
     (OUT / ".nojekyll").write_text("", encoding="utf-8")  # 禁用 Jekyll 处理
 
-    site = dict(SITE, built=date.today().isoformat())
+    site = dict(SITE, built=date.today().isoformat(), nav=NAV)
     for key in SECTIONS:
         (OUT / key).mkdir(exist_ok=True)
 
@@ -236,9 +365,16 @@ def build() -> None:
         )
         (OUT / it["section"] / f'{it["slug"]}.html').write_text(page, encoding="utf-8")
 
+    # 独立页面（content/pages/*.md）
+    for pg in collect_pages():
+        html, toc = render_md(pg["body"])
+        (OUT / f'{pg["slug"]}.html').write_text(
+            T.standalone(site, pg=pg, html=html, toc=toc), encoding="utf-8")
+
     # 列表页
     groups = []
-    for key, (cn, en, intro) in SECTIONS.items():
+    for key, tup in SECTIONS.items():
+        cn, en, intro = section_meta(tup)
         mine = [x for x in items if x["section"] == key]
         groups.append((key, cn, mine))
         (OUT / key / "index.html").write_text(

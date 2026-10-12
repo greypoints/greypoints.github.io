@@ -46,7 +46,13 @@ body {
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  /* 让页脚在内容比视口矮时也贴到底部（否则深色栏会悬在页面中间） */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+main { flex: 1 0 auto; width: 100%; }
 
 ::selection { background: var(--accent-mist); }
 
@@ -596,6 +602,38 @@ a { color: inherit; }
   border: 1px solid var(--line);
   background: var(--surface);
 }
+
+/* ---------- 视频 / 可玩嵌入 ---------- */
+.embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 26px 0;
+  background: #000;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.embed iframe,
+.embed video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+/* 直链视频文件按自身比例显示，不强行裁成 16:9 */
+.embed-file { aspect-ratio: auto; background: #000; }
+.embed-file video { position: static; height: auto; }
+/* itch.io 作品卡：按它自己的比例，避免上下留大片黑边 */
+.embed-itch { aspect-ratio: 552 / 167; background: var(--surface); }
+/* 嵌入前的说明文字（如「作品展示：」）*/
+.embed-label { margin: 26px 0 8px; color: var(--ink-2); font-size: 15px; }
+.embed-label + .embed { margin-top: 0; }
+
+/* 没有目录的独立页面：单栏 */
+.detail.no-toc { grid-template-columns: minmax(0, 1fr); }
+
 .doc-body figure { margin: 26px 0; }
 .doc-body figcaption {
   font-size: 13px;

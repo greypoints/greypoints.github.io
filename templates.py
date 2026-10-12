@@ -16,16 +16,16 @@ def geo_layer() -> str:
 
 
 def nav(site: dict, active: str = "") -> str:
-    """顶栏：品牌 + 导航（active 高亮当前栏目）"""
-    links = [("", "首页"), ("teardown/", "拆解案"), ("design/", "策划案"), ("about.html", "关于")]
+    """顶栏：品牌 + 导航（导航项在 build.py 的 NAV 里配，active 高亮当前栏目）"""
+    links = site.get("nav") or [("", "首页")]
 
     def one(href: str, label: str) -> str:
-        item = f'<a class="ln{" on" if label == active else ""}" href="{site["root"]}{href}">{label}</a>'
-        return item
+        on = " on" if label == active else ""
+        return f'<a class="ln{on}" href="{site["root"]}{href}">{label}</a>'
 
     return f"""<header class="nav">
   <div class="nav-inner">
-    <a class="brand" href="{site["root"]}"><b>GREYPOINT</b> <span>/ 灰点</span></a>
+    <a class="brand" href="{site["root"]}"><b>{E(site["name_en"])}</b> <span>/ {E(site["name_cn"])}</span></a>
     <nav class="nav-links">{"".join(one(h, l) for h, l in links)}</nav>
   </div>
 </header>"""
@@ -35,7 +35,7 @@ def foot(site: dict) -> str:
     """页脚：反色收尾"""
     return f"""<footer class="foot">
   <div class="foot-inner">
-    <div class="foot-brand"><b>GREYPOINT</b> / 灰点</div>
+    <div class="foot-brand"><b>{E(site["name_en"])}</b> / {E(site["name_cn"])}</div>
     <div class="foot-meta">
       <span>{E(site["email"])}</span>
       <span>微信：{E(site["wechat"])}</span>
@@ -120,11 +120,12 @@ def home(site: dict, featured: list, groups: list) -> str:
 def listing(site: dict, *, key: str, cn: str, en: str, intro: str, items: list) -> str:
     rows = "".join(_row(n, it, local=True) for n, it in enumerate(items, 1)) if items \
         else _empty(f'暂无内容。把 md 放进 <code>content/{key}/</code> 后重跑构建脚本即可。')
+    intro_html = f"<p>{E(intro)}</p>" if intro else ""
     body = f"""<main>
 <div class="page-head">
   <span class="kicker">{E(en)}</span>
   <h1>{cn}</h1>
-  <p>{E(intro)}</p>
+  {intro_html}
 </div>
 <div class="wrap" style="padding-top:52px">
   <ol class="items">{rows}</ol>
@@ -135,20 +136,25 @@ def listing(site: dict, *, key: str, cn: str, en: str, intro: str, items: list) 
 
 # ---------- 详情页 ----------
 
+def _toc_html(toc: list) -> str:
+    """左侧目录；无标题则返回空串"""
+    if not toc:
+        return ""
+    links = []
+    for node in toc:
+        links.append(f'<a class="lv{node["level"]}" href="#{node["id"]}">'
+                     f'{E(_plain(node["name"]))}</a>')
+        for child in node.get("children", []):
+            links.append(f'<a class="lv{child["level"]}" href="#{child["id"]}">'
+                         f'{E(_plain(child["name"]))}</a>')
+    return ('<aside class="toc" id="toc">\n'
+            '  <div class="toc-h" id="tocToggle">目录</div>\n'
+            f'  <nav>{"".join(links)}</nav>\n</aside>')
+
+
 def detail(site: dict, *, item: dict, html: str, toc: list,
            prev: dict | None, nxt: dict | None) -> str:
-    toc_html = ""
-    if toc:
-        links = []
-        for node in toc:
-            links.append(f'<a class="lv{node["level"]}" href="#{node["id"]}">{E(_plain(node["name"]))}</a>')
-            for child in node.get("children", []):
-                links.append(f'<a class="lv{child["level"]}" href="#{child["id"]}">'
-                             f'{E(_plain(child["name"]))}</a>')
-        toc_html = f"""<aside class="toc" id="toc">
-  <div class="toc-h" id="tocToggle">目录</div>
-  <nav>{"".join(links)}</nav>
-</aside>"""
+    toc_html = _toc_html(toc)
 
     pn = []
     if prev:
@@ -180,6 +186,32 @@ def detail(site: dict, *, item: dict, html: str, toc: list,
 </main>"""
     return page(site, title=f'{item["title"]} · {site["name_cn"]}', nav_active=item["section_cn"],
                 body=body, desc=item.get("summary") or item["title"])
+
+
+# ---------- 独立页面（content/pages/*.md） ----------
+
+def standalone(site: dict, *, pg: dict, html: str, toc: list) -> str:
+    """不属于任何栏目的独立页面，例如「项目经历」"""
+    toc_html = _toc_html(toc)
+    cls = "detail" if toc_html else "detail no-toc"
+    label = E(pg.get("label") or "")
+    meta = f'<div class="doc-meta"><span>{label}</span></div>' if label else ""
+    summary = f'<p class="summary">{E(pg["summary"])}</p>' if pg.get("summary") else ""
+    body = f"""<div class="progress"><i id="progressBar"></i></div>
+<main class="{cls}">
+{toc_html}
+<article class="doc">
+  <div class="doc-head">
+    {meta}
+    <h1>{E(pg["title"])}</h1>
+    {summary}
+  </div>
+  <div class="doc-body">{html}</div>
+</article>
+</main>"""
+    return page(site, title=f'{pg["title"]} · {site["name_cn"]}',
+                nav_active=pg["title"], body=body,
+                desc=pg.get("summary") or pg["title"])
 
 
 # ---------- 关于页 ----------
