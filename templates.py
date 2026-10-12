@@ -267,6 +267,15 @@ def about(site: dict, blocks: list) -> str:
     """blocks: [{"k": "标签", "v": "值或 HTML"}]"""
     rows = "".join(f'<li><span class="k">{E(b["k"])}</span><span>{b["v"]}</span></li>'
                    for b in blocks)
+    # 「简介」正文留空 → 整块不渲染（在 build.py 的 SITE["bio"] 或 网站文字.txt 里填）
+    bio = (site.get("bio") or "").strip()
+    bio_html = ""
+    if bio:
+        bio_html = f"""  <div class="about-section">
+    <h3>{_f(site, "about_bio_head")}</h3>
+    {bio}
+  </div>
+"""
     body = f"""<main>
 <div class="page-head">
   <span class="kicker">{_f(site, "about_kicker")}</span>
@@ -274,11 +283,7 @@ def about(site: dict, blocks: list) -> str:
   <p>{E(site["claim"])}</p>
 </div>
 <div class="about" style="padding-top:48px">
-  <div class="about-section">
-    <h3>{_f(site, "about_bio_head")}</h3>
-    {site["bio"]}
-  </div>
-  <div class="about-section">
+{bio_html}  <div class="about-section">
     <h3>{_f(site, "about_info_head")}</h3>
     <ul class="about-list">{rows}</ul>
   </div>

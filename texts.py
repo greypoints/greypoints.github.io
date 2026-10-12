@@ -67,7 +67,7 @@ KEY_DEFS = [
 
     # 其它
     ("desc", "其它", "浏览器搜索结果里的站点描述", "site:desc"),
-    ("bio", "其它", "关于页正文（可写多行 HTML，如 <p>…</p>）", "site:bio"),
+    ("bio", "其它", "关于页正文（可写多行 HTML，如 <p>…</p>；留空则整个「简介」区块不显示）", "site:bio"),
     ("title_home", "其它", "首页浏览器标题（留空 = 自动拼「灰点 GREYPOINT · 灰点的个人页」）", "site:title_home"),
 
     # 父子文档
