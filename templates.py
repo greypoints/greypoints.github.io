@@ -97,7 +97,7 @@ def home(site: dict, featured: list, groups: list) -> str:
     if featured:
         feat = "".join(_row(i + 1, it) for i, (it, _) in enumerate(featured))
     else:
-        feat = _empty("还没有作品。<code>content/</code> 里放第一篇 md 就会出现在这里。")
+        feat = _empty("暂无作品。")
 
     blocks = []
     for _, cn, items in groups:
@@ -143,7 +143,7 @@ def home(site: dict, featured: list, groups: list) -> str:
 
 def listing(site: dict, *, key: str, cn: str, en: str, intro: str, items: list) -> str:
     rows = "".join(_row(n, it, local=True) for n, it in enumerate(items, 1)) if items \
-        else _empty(f'暂无内容。把 md 放进 <code>content/{key}/</code> 后重跑构建脚本即可。')
+        else _empty("暂无内容。")
     intro_html = f"<p>{E(intro)}</p>" if intro else ""
     body = f"""<main>
 <div class="page-head">
