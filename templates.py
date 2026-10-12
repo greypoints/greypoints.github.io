@@ -19,6 +19,8 @@ _FIXED_DEFAULT = {
     "about_v_direction": "关卡 / 战斗",
     "about_k_email": "邮箱",
     "about_k_wechat": "微信",
+    "doc_children_head": "子文档",
+    "doc_parent_head": "所属",
 }
 
 
@@ -130,8 +132,8 @@ def home(site: dict, featured: list, groups: list) -> str:
 </section>
 {"".join(blocks)}
 </main>"""
-    return page(site, title=f'{site["name_cn"]} {site["name_en"]} · {site["role"]}',
-                nav_active="", body=body, desc=site["claim"])
+    return page(site, title=site.get("title_home") or f'{site["name_cn"]} {site["name_en"]} · {site["role"]}',
+                nav_active="", body=body, desc=site["desc"])
 
 
 # ---------- 列表页 ----------
@@ -150,7 +152,8 @@ def listing(site: dict, *, key: str, cn: str, en: str, intro: str, items: list) 
   <ol class="items">{rows}</ol>
 </div>
 </main>"""
-    return page(site, title=f"{cn} · {site['name_cn']}", nav_active=cn, body=body, desc=intro)
+    return page(site, title=f"{cn} · {site['name_cn']}", nav_active=cn, body=body,
+                desc=intro or site["desc"])
 
 
 # ---------- 详情页 ----------
@@ -172,7 +175,8 @@ def _toc_html(toc: list) -> str:
 
 
 def detail(site: dict, *, item: dict, html: str, toc: list,
-           prev: dict | None, nxt: dict | None) -> str:
+           prev: dict | None, nxt: dict | None,
+           children: list | None = None, parent: dict | None = None) -> str:
     toc_html = _toc_html(toc)
 
     pn = []
@@ -186,6 +190,26 @@ def detail(site: dict, *, item: dict, html: str, toc: list,
     if item.get("tag"):
         meta.append(f'<span class="tag">{E(item["tag"])}</span>')
 
+    # 子文档 → 父文档的回指
+    parent_html = ""
+    if parent:
+        parent_html = (f'<p class="doc-parent"><span class="k">{_f(site, "doc_parent_head")}</span>'
+                       f'<a class="ln" href="{parent["sibling"]}">{E(parent["title"])}</a></p>')
+
+    # 父文档 → 子文档清单
+    kids_html = ""
+    if children:
+        rows = "".join(
+            f'<li><a href="{c["sibling"]}">'
+            f'<span class="ttl">{E(c["title"])}</span>'
+            f'<span class="meta">{c["chars"]:,} 字 · {c["minutes"]} 分钟</span>'
+            f"</a></li>" for c in children)
+        kids_html = f"""  <section class="doc-children">
+    <h3>{_f(site, "doc_children_head")}</h3>
+    <ol class="items">{rows}</ol>
+  </section>
+"""
+
     body = f"""<div class="progress"><i id="progressBar"></i></div>
 <main class="detail">
 {toc_html}
@@ -194,9 +218,10 @@ def detail(site: dict, *, item: dict, html: str, toc: list,
     <div class="doc-meta">{"".join(f"<span>{m}</span>" for m in meta if m)}</div>
     <h1>{E(item["title"])}</h1>
     {f'<p class="summary">{E(item["summary"])}</p>' if item.get("summary") else ""}
+    {parent_html}
   </div>
   <div class="doc-body">{html}</div>
-  <div class="doc-foot">
+{kids_html}  <div class="doc-foot">
     <div>{pn[0] if pn else ""}</div>
     <a class="back ln" href="./">{E(item["section_en"])} 列表 ↑</a>
     <div>{pn[1] if len(pn) > 1 else ""}</div>
@@ -204,7 +229,7 @@ def detail(site: dict, *, item: dict, html: str, toc: list,
 </article>
 </main>"""
     return page(site, title=f'{item["title"]} · {site["name_cn"]}', nav_active=item["section_cn"],
-                body=body, desc=item.get("summary") or item["title"])
+                body=body, desc=item.get("summary") or site["desc"])
 
 
 # ---------- 独立页面（content/pages/*.md） ----------
@@ -230,7 +255,7 @@ def standalone(site: dict, *, pg: dict, html: str, toc: list) -> str:
 </main>"""
     return page(site, title=f'{pg["title"]} · {site["name_cn"]}',
                 nav_active=pg["title"], body=body,
-                desc=pg.get("summary") or pg["title"])
+                desc=pg.get("summary") or site["desc"])
 
 
 # ---------- 关于页 ----------
@@ -257,7 +282,7 @@ def about(site: dict, blocks: list) -> str:
 </div>
 </main>"""
     return page(site, title=f'关于 · {site["name_cn"]}', nav_active="关于", body=body,
-                desc=site["claim"])
+                desc=site["desc"])
 
 
 # ---------- 内部工具 ----------
@@ -266,8 +291,9 @@ def _row(n: int, it: dict, local: bool = False) -> str:
     """local=True 用于列表页（与详情页同目录），否则用站内根相对路径"""
     tag = f'<em>{E(it["tag"])}</em>' if it.get("tag") else ""
     href = it["sibling"] if local else it["url"]
+    cls = ' class="child"' if it.get("parent") else ""
     return (
-        f'<li><a href="{href}">'
+        f'<li{cls}><a href="{href}">'
         f'<span class="idx">{n:02d}</span>'
         f'<span class="ttl">{E(it["title"])}{tag}</span>'
         f'<span class="meta">{it["chars"]:,} 字 · {it["minutes"]} 分钟</span>'

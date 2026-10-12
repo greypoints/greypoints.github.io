@@ -39,6 +39,7 @@ SITE = {
     "wechat": "Grey_spot",
     "root": "/",  # 站点根路径；若部署到子目录（如 /blog/）改成 "/blog/"
     "bio": "<p>来自中国传媒大学，",
+    "title_home": "",  # 首页浏览器标题；留空 = 自动拼「灰点 GREYPOINT · 灰点的个人页」
 }
 
 # 栏目：目录名 → (中文名, 英文标签, 列表页导语)
@@ -70,6 +71,9 @@ FIXED = {
     "about_v_direction": "关卡 / 战斗",
     "about_k_email": "邮箱",
     "about_k_wechat": "微信",
+    # 父子文档（frontmatter 里的 parent 字段）
+    "doc_children_head": "子文档",
+    "doc_parent_head": "所属",
 }
 
 
@@ -127,10 +131,86 @@ TAGS_RE = re.compile(r"<[^>]+>")
 def render_md(text: str):
     """渲染 Markdown → (html, toc 结构)"""
     MD.reset()
-    html = MD.convert(autolink(text))
+    html = MD.convert(autolink(space_blocks(text)))
     toc = MD.toc_tokens
-    html = embed_media(wrap_tables(mark_numeric_cols(mark_cjk_pre(html))))
+    html = wrap_figures(embed_media(wrap_tables(mark_numeric_cols(mark_cjk_pre(html)))))
     return html, toc
+
+
+# ─────────────── 块级归一化：图片 / 图注前后补空行 ───────────────
+
+BLOCK_STARTS = ("![", '<p class="fig-cap">')
+
+
+def space_blocks(text: str) -> str:
+    """图片和图注是块级元素，但 md 里常常紧贴上一行写。
+    开了 nl2br 之后它们会被并进上一段，图注甚至会整条丢掉。
+    这里在它们前后补空行（并折叠多余空行），保证各自独立成块。"""
+    out = []
+    for ln in text.splitlines():
+        s = ln.strip()
+        if s.startswith(BLOCK_STARTS):
+            if out and out[-1].strip():
+                out.append("")
+            out.append(ln)
+            out.append("")
+        else:
+            out.append(ln)
+    res = []
+    for ln in out:
+        if not ln.strip() and res and not res[-1].strip():
+            continue
+        res.append(ln)
+    return "\n".join(res)
+
+
+# ─────────────── 图片包成 <figure>（配合 CSS 的图注样式） ───────────────
+
+IMG_RE = re.compile(r"<img\b[^>]*?>")
+# markdown 会把独立成段的图片包进 <p>（一行写多张图时，一个 <p> 里会有多个 <img>）；
+# 图注是紧随其后的 .fig-cap 段落
+IMGS_GROUP = r"((?:<img\b[^>]*?>\s*)+)"
+FIG_CAP_RE = re.compile(r'<p>\s*' + IMGS_GROUP + r'</p>\s*<p class="fig-cap">(.*?)</p>', re.S)
+FIG_P_RE = re.compile(r"<p>\s*" + IMGS_GROUP + r"</p>", re.S)
+
+
+def _figs(imgs_html: str, cap: str | None = None) -> str:
+    """把一段里的若干 <img> 变成若干 <figure>；图注只挂在最后一张上"""
+    imgs = IMG_RE.findall(imgs_html)
+    out = []
+    for i, img in enumerate(imgs):
+        last = i == len(imgs) - 1
+        if cap and last:
+            out.append(f"<figure>{img}<figcaption>{cap}</figcaption></figure>")
+        else:
+            out.append(f"<figure>{img}</figure>")
+    return "".join(out)
+
+
+def wrap_figures(html: str) -> str:
+    """正文里每张图都包一层 <figure>；紧随其后的 <p class="fig-cap"> 升级为 <figcaption>。
+    这样图与说明文字成对，不会散在段落里。"""
+    # 1) 图片 + 图注：整段替换，顺带把 markdown 给的 <p> 外壳去掉
+    html = FIG_CAP_RE.sub(lambda m: _figs(m.group(1), m.group(2)), html)
+    # 2) 独立成段的图片（无图注）
+    html = FIG_P_RE.sub(lambda m: _figs(m.group(1)), html)
+    # 3) 剩下的行内裸图（例如写在列表项里的）
+    out, pos = [], 0
+    for m in IMG_RE.finditer(html):
+        before = html[:m.start()]
+        if before.rfind("<figure>") > before.rfind("</figure>"):
+            continue  # 已经在 figure 里了
+        out.append(html[pos:m.start()])
+        rest = html[m.end():]
+        cm = re.match(r'\s*<p class="fig-cap">(.*?)</p>', rest, re.S)
+        if cm:
+            out.append(f"<figure>{m.group(0)}<figcaption>{cm.group(1)}</figcaption></figure>")
+            pos = m.end() + cm.end()
+        else:
+            out.append(f"<figure>{m.group(0)}</figure>")
+            pos = m.end()
+    out.append(html[pos:])
+    return "".join(out)
 
 
 # ─────────────── 裸网址自动成链接 + 视频 / 可玩站点自动内嵌 ───────────────
@@ -316,6 +396,7 @@ def collect() -> dict:
                 "summary": meta.get("summary", ""),
                 "tag": meta.get("tag", ""),
                 "featured": truthy(meta.get("featured", "false")),
+                "parent": (meta.get("parent") or "").strip(),  # 父文档 slug（子文档用）
                 "order": int(meta.get("order") or 999),
                 "source": path, "body": body,
                 "chars": chars, "minutes": minutes,
@@ -348,10 +429,45 @@ def collect_pages() -> list:
 
 
 def _sort(items: list) -> None:
-    """栏目顺序 → order 升序 → date 倒序（无 date 的排后面）"""
+    """栏目顺序 → order 升序 → date 倒序（无 date 的排后面）；
+    再把子文档（parent 指向本栏目内某篇）紧跟在父文档后面。"""
     rank = {k: i for i, k in enumerate(SECTIONS)}
     items.sort(key=lambda it: (
         rank.get(it["section"], 99), it["order"], _neg_date(it["date"]), it["title"]))
+
+    by_slug = {it["slug"]: it for it in items}
+    out, placed = [], set()
+    for it in items:
+        if it["slug"] in placed:
+            continue
+        # 子文档不单独出现，等父文档带它出来
+        if it["parent"] and it["parent"] in by_slug:
+            continue
+        out.append(it)
+        placed.add(it["slug"])
+        for kid in items:
+            if kid["parent"] == it["slug"] and kid["slug"] not in placed:
+                out.append(kid)
+                placed.add(kid["slug"])
+    # 兜底：parent 指向不存在的 slug（或跨栏目）→ 当普通文档排在最后
+    for it in items:
+        if it["slug"] not in placed:
+            out.append(it)
+            placed.add(it["slug"])
+    items[:] = out
+
+
+def children_of(items: list, slug: str) -> list:
+    return [x for x in items if x["parent"] == slug]
+
+
+def parent_of(items: list, it: dict):
+    if not it["parent"]:
+        return None
+    for x in items:
+        if x["slug"] == it["parent"]:
+            return x
+    return None
 
 
 def _neg_date(d: str) -> str:
@@ -370,6 +486,10 @@ def build() -> None:
     shutil.copy2(ROOT / "assets" / "style.css", OUT / "assets" / "style.css")
     shutil.copy2(ROOT / "assets" / "main.js", OUT / "assets" / "main.js")
     shutil.copy2(ROOT / "assets" / "favicon.svg", OUT / "assets" / "favicon.svg")
+    # 文章配图（assets/img/ 存在才拷，没有就跳过）
+    img_src = ROOT / "assets" / "img"
+    if img_src.is_dir():
+        shutil.copytree(img_src, OUT / "assets" / "img")
     (OUT / ".nojekyll").write_text("", encoding="utf-8")  # 禁用 Jekyll 处理
 
     site = dict(SITE, built=date.today().isoformat(), nav=NAV, fixed=FIXED)
@@ -385,6 +505,8 @@ def build() -> None:
             site, item=it, html=html, toc=toc,
             prev=same[pos - 1] if pos > 0 else None,
             nxt=same[pos + 1] if pos + 1 < len(same) else None,
+            children=children_of(items, it["slug"]),
+            parent=parent_of(items, it),
         )
         (OUT / it["section"] / f'{it["slug"]}.html').write_text(page, encoding="utf-8")
 
@@ -403,10 +525,11 @@ def build() -> None:
         (OUT / key / "index.html").write_text(
             T.listing(site, key=key, cn=cn, en=en, intro=intro, items=mine), encoding="utf-8")
 
-    # 首页（精选：featured 优先，不足则用最新补齐）
-    chosen = [x for x in items if x["featured"]][:FEATURED_LIMIT]
+    # 首页（精选：featured 优先，不足则用最新补齐；子文档不单独进精选）
+    top = [x for x in items if not x["parent"]]
+    chosen = [x for x in top if x["featured"]][:FEATURED_LIMIT]
     if len(chosen) < FEATURED_LIMIT:
-        chosen += [x for x in items if x not in chosen][:FEATURED_LIMIT - len(chosen)]
+        chosen += [x for x in top if x not in chosen][:FEATURED_LIMIT - len(chosen)]
     (OUT / "index.html").write_text(
         T.home(site, [(x, i) for i, x in enumerate(chosen)], groups), encoding="utf-8")
 

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>祇·女神之路 关卡重构 1 白盒设计文档 · 灰点</title>
+<meta name="description" content="以本体前期的「幽暗洞」为参照，重构一张初期关卡的白盒方案，含尺度、路径与立体结构设计。">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="geo" aria-hidden="true"><i class="geo-dot gd-1"></i><i class="geo-dot gd-2"></i><i class="geo-dot gd-3"></i><i class="geo-dot gd-4"></i><i class="geo-dot gd-5"></i><i class="geo-dot gd-6"></i><i class="geo-dot gd-7"></i><i class="geo-line gl-1"></i><i class="geo-line gl-2"></i></div>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/"><b>GREYPOINT</b> <span>/ 灰点</span></a>
+    <nav class="nav-links"><a class="ln" href="/">首页</a><a class="ln on" href="/teardown/">拆解案</a><a class="ln" href="/design/">策划案</a><a class="ln" href="/projects.html">项目</a><a class="ln" href="/about.html">关于</a></nav>
+  </div>
+</header>
+<div class="progress"><i id="progressBar"></i></div>
+<main class="detail">
+<aside class="toc" id="toc">
+  <div class="toc-h" id="tocToggle">目录</div>
+  <nav><a class="lv3" href="#_1">一、关卡定位</a><a class="lv3" href="#_2">二、关卡结构</a><a class="lv3" href="#_3">三、重要尺度</a><a class="lv3" href="#_4">四、设计要点</a><a class="lv3" href="#_5">初版俯视图</a></nav>
+</aside>
+<article class="doc">
+  <div class="doc-head">
+    <div class="doc-meta"><span>拆解案</span><span>2026-10-13</span><span>488 字</span><span>约 1 分钟</span><span><span class="tag">白盒</span></span></div>
+    <h1>祇·女神之路 关卡重构 1 白盒设计文档</h1>
+    <p class="summary">以本体前期的「幽暗洞」为参照，重构一张初期关卡的白盒方案，含尺度、路径与立体结构设计。</p>
+    <p class="doc-parent"><span class="k">所属</span><a class="ln" href="kunitsu-gami.html">《祇：女神之路》拆解</a></p>
+  </div>
+  <div class="doc-body"><h3 id="_1">一、关卡定位</h3>
+<ul>
+<li>类型：初期关卡</li>
+<li>时长目标：30min/2-3天</li>
+<li>难度定位：非常简单</li>
+</ul>
+<h3 id="_2">二、关卡结构</h3>
+<figure><img alt="重构关卡的平面结构" src="/assets/img/kunitsu-gami/whitebox-structure.jpg" /></figure>
+<p>怪物可以走楼梯而不会通过大台阶<br />
+玩家则可以任意方向通过（对于大台阶）</p>
+<h3 id="_3">三、重要尺度</h3>
+<p><strong>公主路径</strong>：起点 → 鸟居（约 110 m）<br />
+空间总长度：约11000单位（110m）<br />
+道路宽度：600-1000<br />
+玩家角色高度：200<br />
+大台阶高度差：200-350</p>
+<h3 id="_4">四、设计要点</h3>
+<ul>
+<li>为了保证塔防游戏的路线可读性，游戏本体中没有做过多广场/多交叉路口的设计，这一特点应该延续在重构的地图中</li>
+<li>游戏本体只在部分boss关卡设计了立体结构，笔者认为比较可惜，于是设计了一个空中平台，也可以用于在夜晚更好地观看怪物路径</li>
+</ul>
+<h3 id="_5">初版俯视图</h3>
+<figure><img alt="重构关卡初版俯视图" src="/assets/img/kunitsu-gami/whitebox-topdown.jpg" /></figure>
+<p>二层平台处结构</p>
+<figure><img alt="二层平台处结构" src="/assets/img/kunitsu-gami/whitebox-platform.jpg" /></figure></div>
+  <div class="doc-foot">
+    <div><a class="ln" href="kunitsu-gami.html">← 《祇：女神之路》拆解</a></div>
+    <a class="back ln" href="./">TEARDOWN 列表 ↑</a>
+    <div><a class="ln" href="example-teardown.html">【示例】《某某游戏》章节一关卡拆解 →</a></div>
+  </div>
+</article>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand"><b>GREYPOINT</b> / 灰点</div>
+    <div class="foot-meta">
+      <span>18272287614@163.com</span>
+      <span>微信：Grey_spot</span>
+      <span>更新于 2026-10-13</span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/main.js" defer></script>
+</body>
+</html>

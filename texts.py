@@ -68,6 +68,11 @@ KEY_DEFS = [
     # 其它
     ("desc", "其它", "浏览器搜索结果里的站点描述", "site:desc"),
     ("bio", "其它", "关于页正文（可写多行 HTML，如 <p>…</p>）", "site:bio"),
+    ("title_home", "其它", "首页浏览器标题（留空 = 自动拼「灰点 GREYPOINT · 灰点的个人页」）", "site:title_home"),
+
+    # 父子文档
+    ("doc_children_head", "父子文档", "父文档页里子文档清单的小标题", "fixed:doc_children_head"),
+    ("doc_parent_head", "父子文档", "子文档页里指回父文档的小标签", "fixed:doc_parent_head"),
 ]
 
 KEYS = [k for k, *_ in KEY_DEFS]
@@ -111,7 +116,7 @@ def parse(site: dict, sections: dict, nav: list, fixed: dict) -> tuple[dict, lis
         got.update(_read_file(base))
 
     merged_site = dict(site)
-    for key in ("name_en", "name_cn", "role", "claim", "desc", "email", "wechat", "bio"):
+    for key in ("name_en", "name_cn", "role", "claim", "desc", "email", "wechat", "bio", "title_home"):
         merged_site[key] = got[key]
 
     merged_sections = {}
@@ -136,6 +141,8 @@ def parse(site: dict, sections: dict, nav: list, fixed: dict) -> tuple[dict, lis
         "about_v_direction": got["about_v_direction"],
         "about_k_email": got["about_k_email"],
         "about_k_wechat": got["about_k_wechat"],
+        "doc_children_head": got["doc_children_head"],
+        "doc_parent_head": got["doc_parent_head"],
     }
 
     return merged_site, merged_sections, merged_nav, merged_fixed, got

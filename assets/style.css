@@ -315,6 +315,16 @@ a { color: inherit; }
 .items a:hover .ttl { color: var(--accent); }
 .items a:hover .idx { color: var(--accent-2); }
 
+/* 子文档：左侧留一道青绿细线，标题降一级，视觉上挂在父文档下面 */
+.items li.child { border-left: 2px solid var(--accent-mist); }
+.items li.child a { padding-left: 26px; }
+.items li.child .ttl {
+  font-size: 16.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.items li.child a:hover .ttl { color: var(--accent); }
+
 .items .idx {
   font-family: var(--mono);
   font-size: 12px;
@@ -496,6 +506,18 @@ a { color: inherit; }
   font-size: 17px;
   font-weight: 600;
 }
+.doc-body h5 {
+  margin: 24px 0 9px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.doc-body h6 {
+  margin: 20px 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
 .doc-body p { margin: 0 0 18px; }
 .doc-body ul, .doc-body ol { margin: 0 0 18px; padding-left: 22px; }
 .doc-body li { margin-bottom: 7px; }
@@ -644,6 +666,47 @@ a { color: inherit; }
   margin-top: 8px;
   text-align: center;
 }
+/* figure 里的图自己不用再留外边距，交给 figure 控制 */
+.doc-body figure img { margin: 0; }
+
+/* ---------- 父子文档 ---------- */
+/* 子文档页：指回父文档 */
+.doc-parent {
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.doc-parent .k {
+  display: inline-block;
+  margin-right: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+.doc-parent a { color: var(--ink); border-bottom: 1px solid var(--line); }
+.doc-parent a:hover { border-bottom-color: var(--accent); }
+
+/* 父文档页：子文档清单 */
+.doc-children {
+  margin-top: 60px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.doc-children h3 {
+  margin: 0 0 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+}
+.doc-children .items li:last-child { border-bottom: 0; }
+.doc-children .items a {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 16px 4px;
+}
+.doc-children .items .ttl { font-size: 16.5px; }
 
 /* ---------- 文末导航 ---------- */
 .doc-foot {

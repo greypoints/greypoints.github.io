@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>《祇：女神之路》拆解 · 灰点</title>
+<meta name="description" content="卡普空的 3D 动作塔防。白天护送巫女净化出怪点，夜晚与村民一同守夜，昼夜交替构成一整关的节奏。">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="geo" aria-hidden="true"><i class="geo-dot gd-1"></i><i class="geo-dot gd-2"></i><i class="geo-dot gd-3"></i><i class="geo-dot gd-4"></i><i class="geo-dot gd-5"></i><i class="geo-dot gd-6"></i><i class="geo-dot gd-7"></i><i class="geo-line gl-1"></i><i class="geo-line gl-2"></i></div>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/"><b>GREYPOINT</b> <span>/ 灰点</span></a>
+    <nav class="nav-links"><a class="ln" href="/">首页</a><a class="ln on" href="/teardown/">拆解案</a><a class="ln" href="/design/">策划案</a><a class="ln" href="/projects.html">项目</a><a class="ln" href="/about.html">关于</a></nav>
+  </div>
+</header>
+<div class="progress"><i id="progressBar"></i></div>
+<main class="detail">
+<aside class="toc" id="toc">
+  <div class="toc-h" id="tocToggle">目录</div>
+  <nav><a class="lv2" href="#_1">游戏简介</a><a class="lv3" href="#_2">概述</a><a class="lv3" href="#_3">核心玩法</a><a class="lv3" href="#_8">战斗系统</a><a class="lv3" href="#_11">养成系统</a><a class="lv3" href="#_14">关卡</a></nav>
+</aside>
+<article class="doc">
+  <div class="doc-head">
+    <div class="doc-meta"><span>拆解案</span><span>2026-10-13</span><span>5,104 字</span><span>约 13 分钟</span><span><span class="tag">塔防</span></span></div>
+    <h1>《祇：女神之路》拆解</h1>
+    <p class="summary">卡普空的 3D 动作塔防。白天护送巫女净化出怪点，夜晚与村民一同守夜，昼夜交替构成一整关的节奏。</p>
+    
+  </div>
+  <div class="doc-body"><figure><img alt="《祇：女神之路》主视觉" src="/assets/img/kunitsu-gami/cover.jpg" /></figure>
+<h2 id="_1">游戏简介</h2>
+<p>《祇：女神之路》是一款由<a href="https://baike.baidu.com/item/CAPCOM/577314?fromModule=lemma_inlink">CAPCOM</a>开发的动作策略‎游戏，于2024年7月19日发售。<br />
+游戏中玩家将扮演主人公“宗”，为了保护山之巫女“世代”，举刀挥舞，挺身对抗畏哭。</p>
+<blockquote>
+<p>该作是一款令人兴奋的动作、策略混合游戏，游戏中的灵感之源和精妙的细节，关卡的昼夜结构令人满足，轻易地让人产生“再干一件事”的冲动，虽然据点中的繁琐操作偶尔会令人烦躁。总体而言，《祇：女神之路》的游戏体验依然别具一格且令人愉快。（IGN网评 [8]）</p>
+</blockquote>
+<h3 id="_2">概述</h3>
+<p>这是一款卡普空出品的3d动作塔防游戏，画面上展现了极其繁华美丽的和风，玩家需要操作主角宗在关卡内循环完成白天的清图做准备，夜晚与敌人战斗保护公主，最终把公主送到终点（也是出怪点）。而每个关卡攻克过后会变成你的据点，玩家需要建设据点获得强化。</p>
+<h3 id="_3">核心玩法</h3>
+<ul>
+<li>相比于传统塔防有两个特殊设计：<br />
+1. 在白天也就是准备的时间，玩家需要护送公主前进到终点，完成净化出怪点，这里公主的前进与停止是需要玩家手动完成的，而且需要消耗关卡内的货币。也就是说你越接近终点就会让怪物离你的保护点更近，压力更大，考验玩家控制好距离。</li>
+</ul>
+<figure><img alt="公主的前进与停止由玩家手动控制，需消耗关卡内货币" src="/assets/img/kunitsu-gami/core-escort.jpg" /></figure>
+<ol start="2">
+<li>需要放置的塔是玩家决定站位的村民，玩家操控主角在白天找到并净化分布在关卡各个角落的村民，然后就可以消耗关卡内货币将普通村民转变为战斗职业，并可以随时安排占位</li>
+</ol>
+<figure><img alt="白天净化村民后，可消耗货币将其转为战斗职业并安排站位" src="/assets/img/kunitsu-gami/core-villager.jpg" /></figure>
+<h4 id="_4">循环结构图</h4>
+<figure><img alt="昼夜交替的关卡循环结构" src="/assets/img/kunitsu-gami/loop.jpg" /></figure>
+<p>玩家重复完成在夜晚与村民一起战胜敌人保护公主，白天搜集资源准备防御工程并护送公主前进</p>
+<h4 id="_5">失败条件</h4>
+<p>公主血条被清空则失败，可选择重新关卡或从上一个存档点开始<br />
+- 值得一提的是，此游戏为每个白天开始时自动存档，若上一个存档点的白天开始时公主只剩下很少的血量，那么游戏失败会反复在这一天重来，造成死档的无力感，只能重开。而一个关卡约30-50min，这样的重开会增加玩家的挫败感。<br />
+- 《王国保卫战》与《明日方舟》的剿灭也有同样的问题，在一局时间较长的情况下却在最后节点失败是塔防令玩家非常沮丧的环节，《女神之路》有明确用时间分割的节点与按节点存档，理应能带来更好的体验，比如在关卡内按天数自由选择存档，会让玩家更放心地规划路线</p>
+<h4 id="3c">3C</h4>
+<h5 id="_6">角色</h5>
+<p><strong>主角：宗</strong> 有完整的动作系统，输出有限但可以被装备强化。移动速度最高，便于及时抽身与调度<br />
+村民：可转职为不同职业，会自动攻击敌人和释放技能，会小范围自动跑位</p>
+<h5 id="_7">摄像机</h5>
+<p>第三人称摄像机在主角头顶跟着主角宗移动，可控制围绕主角环形与上下旋转<br />
+调度村民站位时镜头会拉远，显示出更多范围</p>
+<h3 id="_8">战斗系统</h3>
+<h4 id="_9">主机角色·宗</h4>
+<ul>
+<li>玩家角色初始拥有轻重击与蓄力重击：轻击X重击Y<br />
+  三段轻击每段后使用的重击与单独重击都有不同效果，任意段轻击完成后蓄力延续当前段重击的攻击方式，使重击伤害更高</li>
+</ul>
+<figure><img alt="主角宗的普攻模板" src="/assets/img/kunitsu-gami/combat-template.jpg" /><figcaption>普攻模板</figcaption></figure>
+
+<ul>
+<li>随关卡推进会逐渐解锁：</li>
+<li>远程伤害：弓箭</li>
+<li>技能（刀锷）：初始可携带1只，后续会增加可携带个数。在关卡内选中后可以使用，使用后有cd，且cd只在选中时减少</li>
+<li>格挡，闪避，快速突进</li>
+</ul>
+<h4 id="_10">敌人</h4>
+<p>怪物种类分为普通怪物与精英怪物，精英怪物拥有写有签名的独特显眼的血条<br />
+敌人拥有血条与架势条（命名为崩），清空架势条则会击倒敌人且造成大量伤害<br />
+蓄力重击与强化后的村民可以造成架势伤害</p>
+<h3 id="_11">养成系统</h3>
+<h4 id="_12">资源流转图</h4>
+<figure><img alt="资源流转图" src="/assets/img/kunitsu-gami/economy-flow.jpg" /></figure>
+<ul>
+<li>这里要提到，由于货币在全局统一留存，不会因为出入关卡而增加减少或重置</li>
+<li>为了防止出现一开始进入新的关卡时身上货币极少，导致关卡难度变大的情况，玩家对于立刻结束关卡还是再战斗一晚备战下一关产生了更多焦虑。<strong>游戏设置每次通关后，在每个据点都可以领到一定量的供奉货币</strong>，不过繁琐的进出关卡与加载界面还是会令人不耐烦</li>
+</ul>
+<h4 id="_13">职业强化</h4>
+<figure><img alt="主角与村民职业的强化界面" src="/assets/img/kunitsu-gami/upgrade-ui.jpg" /><figcaption>主角与职业的强化界面</figcaption></figure>
+
+<p>村民职业随游戏进度逐步解锁<br />
+职业大致分以下几种：<br />
+近战小兵：杣人（斧头樵夫）、长枪<br />
+远程小兵：弓兵、火枪<br />
+近战特化：角力（坦克）<br />
+远程特化：火炮<br />
+战斗辅助：修验者（软控减速）、巫术（奶）、太吏（净化）、阴阳师（吟诵攒大）<br />
+资源辅助：物盗（白天开启地图中埋藏的宝箱）</p>
+<blockquote>
+<p>地图中埋藏的宝箱数量少，且需要玩家自己找到后指挥盗贼去开启，部分宝箱有锁还需要升级盗贼才能开启，所以总感觉有点不划算，如果盗贼能像向日葵（先锋）一样带来一些额外的收入的话我会更乐意使用它。</p>
+</blockquote>
+<ul>
+<li>在几关基础教学完成后，会开放村民职业的强化</li>
+<li>强化路径一共六级，在三级与六级处会有机制上的强化，其余一二级为小幅数值强化，四五级为大幅数值强化</li>
+<li>其中部分战斗职业会在机制加强时引入<strong>崩</strong>，对敌人造成架势伤害</li>
+</ul>
+<figure><img alt="村民职业强化路径，共六级" src="/assets/img/kunitsu-gami/upgrade-path.jpg" /></figure>
+<figure><img alt="主角宗的强化界面" src="/assets/img/kunitsu-gami/upgrade-protagonist.jpg" /></figure>
+<figure><img alt="主角宗的强化界面" src="/assets/img/kunitsu-gami/upgrade-protagonist-2.jpg" /><figcaption>主角宗的强化</figcaption></figure>
+
+<h3 id="_14">关卡</h3>
+<p>以大约两关塔防，一关boss战的结构推进，但实际上关卡会不断推出新的机制与风格迥异的地图，所以玩家能保持新鲜感</p>
+<h4 id="_15">关卡选择界面</h4>
+<p>从山顶向山下进发，与剧情的路径一致</p>
+<figure><img alt="关卡选择界面，从山顶向山下进发" src="/assets/img/kunitsu-gami/stage-select.jpg" /></figure>
+<h4 id="-">特定关卡-幽暗洞</h4>
+<p>这里选取一个前期关卡进行拆解</p>
+<h5 id="_16">地图路径</h5>
+<p>关卡俯视地图</p>
+<figure><img alt="幽暗洞关卡俯视地图" src="/assets/img/kunitsu-gami/map-overview.jpg" /></figure>
+<figure><img alt="幽暗洞关卡俯视地图" src="/assets/img/kunitsu-gami/map-overview-2.jpg" /></figure>
+<ul>
+<li>最下面的直线为公主行动的主路，从左到右前进</li>
+<li>黑色的鸟居为阶段性出怪点，公主到达第一个出怪点并完成净化后开启右侧区域，两个都完成则通关</li>
+<li>怪物会分岔路前进，所以在两个较近的支路口附近时会出现腹背受敌的情况<br />
+可以看出本关卡为较简单的<strong>一条主线路+少量支路的结构，且只会在正前方刷新怪物</strong><br />
+本关卡村民数：5<br />
+需净化的污秽数：6+7（两个区域分开）<br />
+需点亮的灯火：6+8（全部灯火点亮可以基本覆盖关卡全路径</li>
+</ul>
+<h5 id="_17">出怪概述</h5>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th class="num">第n晚</th>
+<th class="num">波次</th>
+<th>出怪</th>
+<th>时长/min（估计）</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="num">1</td>
+<td class="num">1</td>
+<td>基础近战地面怪+基础空中怪+基础远程地面怪</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td class="num">1</td>
+<td class="num">2</td>
+<td>基础近战地面怪+基础空中怪+基础远程地面怪</td>
+<td>&gt;2（天亮结束）</td>
+<td></td>
+</tr>
+<tr>
+<td class="num">2</td>
+<td class="num">1</td>
+<td>上述基础怪+针对灯火并强化敌人的精英怪</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td class="num">2</td>
+<td class="num">2</td>
+<td>上述基础怪+针对灯火并强化敌人的精英怪</td>
+<td>2（天亮结束）</td>
+<td></td>
+</tr>
+<tr>
+<td class="num">3</td>
+<td class="num">1</td>
+<td>上述基础怪+针对灯火并强化敌人的精英怪</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td class="num">由于本关卡压力较低，第二天白天抵达第一个鸟居并完成了第一区域的进化，进入第二区域</td>
+<td class="num"></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td class="num">第二天时，我发现有一段时间完全不刷怪，之后发现是有两个基础近战地面怪被屏障挡住，两个小怪的攻击对屏障来说微不足道，但场上怪物没清干净就不会刷新新的波次</td>
+<td class="num"></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h5 id="_18">地图元素</h5>
+<h6 id="_19">游戏核心</h6>
+<p><strong>主道路</strong></p>
+<figure><img alt="公主行动的主道路" src="/assets/img/kunitsu-gami/main-road.jpg" /></figure>
+<p><strong>出怪点</strong><br />
+天亮状态</p>
+<figure><img alt="出怪点天亮状态" src="/assets/img/kunitsu-gami/spawn-day.jpg" /></figure>
+<p>天黑状态</p>
+<figure><img alt="出怪点天黑状态" src="/assets/img/kunitsu-gami/spawn-night.jpg" /></figure>
+<h6 id="_20">资源</h6>
+<p><strong>污染村民</strong>：关卡内固定分布，净化后获得1人力（可调度村民）<figure><img alt="污染村民，净化后获得 1 人力" src="/assets/img/kunitsu-gami/resource-villager.jpg" /></figure><br />
+<strong>污秽</strong>：关卡内固定分布，净化后掉落大量货币；且会显示数量，鼓励玩家全部完成，全部完成后可以在特定位置领取特殊奖励（新的装备/刀锷/产灵）<br />
+且污秽会有明显视觉提醒，在较灰的场景中使用高明度的色彩进行标识</p>
+<figure><img alt="污秽，净化后掉落大量货币" src="/assets/img/kunitsu-gami/resource-defilement.jpg" /></figure><figure><img alt="污秽在灰暗场景中用高明度色彩标识" src="/assets/img/kunitsu-gami/resource-defilement-2.jpg" /></figure>
+<p>领取特殊奖励处与完成净化提醒<br />
+全部净化的提醒几乎占满整个屏幕，很显眼，但简约的线条不会过分遮挡玩家视线</p>
+<figure><img alt="领取特殊奖励处" src="/assets/img/kunitsu-gami/reward-claim.jpg" /></figure><figure><img alt="全部净化完成的全屏提醒" src="/assets/img/kunitsu-gami/purify-notice.jpg" /></figure>
+<p><strong>障碍：</strong> 部分污秽前会有遮挡，需要花费关卡内获得的人力与一定时间完成清理，清理后让玩家可以继续净化或打开捷径</p>
+<figure><img alt="需消耗人力与时间清理的障碍" src="/assets/img/kunitsu-gami/obstacle.jpg" /></figure>
+<p><strong>污染植物</strong>：关卡内分布多，被打掉后掉落少量货币，且每晚会随机刷新<br />
+它是可再生小额资源，在没有敌人的白天能够暂缓货币的焦虑，若是污秽全部净化后仍有剩余白天，能做的事依旧十分有限</p>
+<figure><img alt="污染植物，被打掉后掉落少量货币且每晚刷新" src="/assets/img/kunitsu-gami/resource-plant.jpg" /></figure>
+<p><strong>污染动物</strong>：少量分布，攻击后完成净化，掉落回血道具（粮食）</p>
+<figure><img alt="污染动物，净化后掉落回血道具" src="/assets/img/kunitsu-gami/resource-animal.jpg" /></figure><figure><img alt="污染动物" src="/assets/img/kunitsu-gami/resource-animal-2.jpg" /></figure>
+<p><strong>埋藏宝箱</strong>：可能开出货币/产灵/回血道具</p>
+<figure><img alt="埋藏宝箱" src="/assets/img/kunitsu-gami/resource-chest.jpg" /></figure>
+<h6 id="_21">战斗</h6>
+<p><strong>洗手台</strong>：升级后可以在夜间获得强化</p>
+<figure><img alt="洗手台，升级后夜间获得强化" src="/assets/img/kunitsu-gami/washbasin.jpg" /></figure>
+<p><strong>防御工程</strong><br />
+<strong>护盾</strong><br />
+白天状态</p>
+<figure><img alt="护盾白天状态" src="/assets/img/kunitsu-gami/shield-day.jpg" /></figure>
+<p>夜间状态</p>
+<figure><img alt="护盾夜间状态" src="/assets/img/kunitsu-gami/shield-night.jpg" /></figure>
+<h6 id="_22">关卡机制</h6>
+<p><strong>灯火</strong>：固定分布，指挥村民操作后点亮周围</p>
+<figure><img alt="灯火，点亮后覆盖周围区域" src="/assets/img/kunitsu-gami/beacon.jpg" /></figure>
+<h6 id="_23">其他地编元素</h6>
+<p>桥与护栏</p>
+<figure><img alt="桥与护栏" src="/assets/img/kunitsu-gami/bridge.jpg" /></figure>
+<p>污染奇观</p>
+<figure><img alt="污染奇观" src="/assets/img/kunitsu-gami/wonder.jpg" /></figure>
+<p>假山与怪石</p>
+<figure><img alt="假山与怪石" src="/assets/img/kunitsu-gami/rocks.jpg" /></figure>
+<p>小物件</p>
+<figure><img alt="地编小物件" src="/assets/img/kunitsu-gami/props-1.jpg" /></figure><figure><img alt="地编小物件" src="/assets/img/kunitsu-gami/props-2.jpg" /></figure>
+<p>蜡烛</p>
+<figure><img alt="蜡烛" src="/assets/img/kunitsu-gami/candle.jpg" /></figure></div>
+  <section class="doc-children">
+    <h3>子文档</h3>
+    <ol class="items"><li><a href="kunitsu-gami-whitebox-01.html"><span class="ttl">祇·女神之路 关卡重构 1 白盒设计文档</span><span class="meta">488 字 · 1 分钟</span></a></li></ol>
+  </section>
+  <div class="doc-foot">
+    <div><a class="ln" href="kunitsu-gami-whitebox-01.html">祇·女神之路 关卡重构 1 白盒设计文档 →</a></div>
+    <a class="back ln" href="./">TEARDOWN 列表 ↑</a>
+    <div></div>
+  </div>
+</article>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand"><b>GREYPOINT</b> / 灰点</div>
+    <div class="foot-meta">
+      <span>18272287614@163.com</span>
+      <span>微信：Grey_spot</span>
+      <span>更新于 2026-10-13</span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/main.js" defer></script>
+</body>
+</html>
