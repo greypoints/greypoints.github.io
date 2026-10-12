@@ -33,7 +33,7 @@ SITE = {
     "name_en": "GREYPOINT",
     "name_cn": "灰点",
     "role": "灰点的个人页",
-    "claim": "我的项目与设计案。",
+    "claim": "我的项目与设计案",
     "desc": "灰点的个人作品集：游戏拆解案、策划案存档。",
     "email": "18272287614@163.com",
     "wechat": "Grey_spot",
@@ -58,12 +58,32 @@ NAV = [
 
 FEATURED_LIMIT = 3  # 首页精选条数
 
+# 模板里的固定文字（默认值；可被 网站文字.txt 覆盖）
+FIXED = {
+    "sec_featured": "精选",
+    "sec_contact": "CONTACT",
+    "sec_archive": "ARCHIVE",
+    "about_kicker": "ABOUT",
+    "about_bio_head": "简介",
+    "about_info_head": "信息",
+    "about_k_direction": "方向",
+    "about_v_direction": "关卡 / 战斗",
+    "about_k_email": "邮箱",
+    "about_k_wechat": "微信",
+}
+
 
 def section_meta(tup) -> tuple:
     """栏目配置允许两段（中文名 / 英文标签）或三段（再加列表页导语）"""
     cn, en = tup[0], tup[1]
     intro = tup[2] if len(tup) > 2 else ""
     return cn, en, intro
+
+
+# 文字层：把 网站文字.txt 的改动合并进来（文件不存在就原样用上面的值）
+import texts as _TEXTS  # noqa: E402
+
+SITE, SECTIONS, NAV, FIXED, TEXT_VALUES = _TEXTS.parse(SITE, SECTIONS, NAV, FIXED)
 
 # ─────────────────────────── frontmatter ───────────────────────────
 
@@ -352,7 +372,7 @@ def build() -> None:
     shutil.copy2(ROOT / "assets" / "favicon.svg", OUT / "assets" / "favicon.svg")
     (OUT / ".nojekyll").write_text("", encoding="utf-8")  # 禁用 Jekyll 处理
 
-    site = dict(SITE, built=date.today().isoformat(), nav=NAV)
+    site = dict(SITE, built=date.today().isoformat(), nav=NAV, fixed=FIXED)
     for key in SECTIONS:
         (OUT / key).mkdir(exist_ok=True)
 
@@ -392,9 +412,9 @@ def build() -> None:
 
     # 关于页
     about_blocks = [
-        {"k": "方向", "v": SITE["role"] + "关卡策划"},
-        {"k": "邮箱", "v": f'<a href="mailto:{SITE["email"]}">{SITE["email"]}</a>'},
-        {"k": "微信", "v": SITE["wechat"]},
+        {"k": FIXED["about_k_direction"], "v": FIXED["about_v_direction"]},
+        {"k": FIXED["about_k_email"], "v": f'<a href="mailto:{SITE["email"]}">{SITE["email"]}</a>'},
+        {"k": FIXED["about_k_wechat"], "v": SITE["wechat"]},
     ]
     (OUT / "about.html").write_text(T.about(site, about_blocks), encoding="utf-8")
 

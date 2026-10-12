@@ -29,13 +29,17 @@ DOCS = ROOT / "docs"
 FAILS = []
 CHECKS = [0]
 
-BAT_FILES = ["本地预览.bat", "更新网站.bat", "首次部署.bat"]
+BAT_FILES = ["本地预览.bat", "更新网站.bat", "首次部署.bat", "生成文字模板.bat"]
 EXPECTED = [
     "index.html", "about.html", ".nojekyll",
     "assets/style.css", "assets/main.js", "assets/favicon.svg",
     "teardown/index.html", "design/index.html",
     "teardown/example-teardown.html", "design/example-design.html",
 ]
+
+# 文字层：验证「改 txt → 重建 → 页面变」这条链路真的通
+TEXT_FILE = ROOT / "网站文字.txt"
+TEXT_KEYS_PROBE = ("role", "claim", "nav_4", "about_k_direction")
 
 
 def check(label, ok, detail=""):
@@ -138,8 +142,59 @@ for name in BAT_FILES:
     check(f"{name} has no bare chcp", "chcp" not in text.lower())
     check(f"{name} picks an interpreter", "PY=py -3" in text)
 
-# ── 5. HTTP 抓页面 ─────────────────────────────────────────────
-print("[5] serve docs/ over HTTP and fetch every page")
+# ── 5. 文字层（网站文字.txt）────────────────────────────────────
+print("[5] text layer: edit 网站文字.txt -> rebuild -> page changes")
+backup = None
+if TEXT_FILE.exists():
+    backup = TEXT_FILE.read_text(encoding="utf-8")
+
+    def set_key(text, key, value):
+        """只改目标键那一行，其余原样"""
+        out, hit = [], 0
+        for ln in text.splitlines(True):
+            if ln.strip().startswith(key + "："):
+                out.append(f"{key}：{value}\n")
+                hit += 1
+            else:
+                out.append(ln)
+        assert hit == 1, f"{key}: matched {hit} lines"
+        return "".join(out)
+
+    probes = [("role", "家里的个人页", DOCS / "index.html", "index"),
+              ("about_k_direction", "方向标", DOCS / "about.html", "about")]
+    for key, value, page, label in probes:
+        TEXT_FILE.write_text(set_key(backup, key, value), encoding="utf-8")
+        r = build()
+        ok = r.returncode == 0 and value in read(page)
+        check(f"txt key '{key}' reaches {label} page", ok, r.stderr[-200:])
+        TEXT_FILE.write_text(backup, encoding="utf-8")
+
+    # 还原后必须回到原样
+    r = build()
+    check("restore txt + rebuild exits 0", r.returncode == 0, r.stderr[-200:])
+    check("restored page drops the probe text",
+          "家里的个人页" not in read(DOCS / "index.html"))
+
+    # 容错：文件整个不存在也要能构建
+    TEXT_FILE.unlink()
+    r = build()
+    check("build works with 网站文字.txt absent", r.returncode == 0, r.stderr[-200:])
+    TEXT_FILE.write_text(backup, encoding="utf-8")
+
+    # 键名写错的行被忽略（不能把站搞崩，也不能改到别的键）
+    TEXT_FILE.write_text("not_a_key：WRONG\nclaim：只改这一行\n", encoding="utf-8")
+    r = build()
+    check("unknown key ignored, valid key applied",
+          r.returncode == 0 and "只改这一行" in read(DOCS / "index.html")
+          and "WRONG" not in read(DOCS / "index.html"), r.stderr[-200:])
+    TEXT_FILE.write_text(backup, encoding="utf-8")
+    r = build()
+    check("final restore exits 0", r.returncode == 0, r.stderr[-200:])
+else:
+    check("网站文字.txt exists", False, "missing")
+
+# ── 6. HTTP 抓页面 ─────────────────────────────────────────────
+print("[6] serve docs/ over HTTP and fetch every page")
 
 
 class Quiet(http.server.SimpleHTTPRequestHandler):
@@ -167,8 +222,8 @@ for u in ["/", "/teardown/", "/design/", "/about.html",
         check(f"HTTP 200 {u}", False, repr(e))
 srv.shutdown()
 
-# ── 6. 收尾：回到干净状态 ──────────────────────────────────────
-print("[6] cleanup and confirm the repo returns to its committed state")
+# ── 7. 收尾：回到干净状态 ──────────────────────────────────────
+print("[7] cleanup and confirm the repo returns to its committed state")
 tmp.unlink()
 r = build()
 check("rebuild after cleanup exits 0", r.returncode == 0, r.stderr[-400:])

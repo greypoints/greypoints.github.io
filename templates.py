@@ -7,6 +7,25 @@
 
 from html import escape as E
 
+# 模板固定文字的兜底默认值（正常由 build.py 的 FIXED + 网站文字.txt 提供）
+_FIXED_DEFAULT = {
+    "sec_featured": "精选",
+    "sec_contact": "CONTACT",
+    "sec_archive": "ARCHIVE",
+    "about_kicker": "ABOUT",
+    "about_bio_head": "简介",
+    "about_info_head": "信息",
+    "about_k_direction": "方向",
+    "about_v_direction": "关卡 / 战斗",
+    "about_k_email": "邮箱",
+    "about_k_wechat": "微信",
+}
+
+
+def _f(site: dict, key: str) -> str:
+    """取固定文字：优先 网站文字.txt 的值，其次模板兜底"""
+    return (site.get("fixed") or {}).get(key) or _FIXED_DEFAULT.get(key, "")
+
 
 def geo_layer() -> str:
     """背景装饰层：星尘点阵 + 漂移细线（纯 CSS 动效）"""
@@ -38,7 +57,7 @@ def foot(site: dict) -> str:
     <div class="foot-brand"><b>{E(site["name_en"])}</b> / {E(site["name_cn"])}</div>
     <div class="foot-meta">
       <span>{E(site["email"])}</span>
-      <span>微信：{E(site["wechat"])}</span>
+      <span>{_f(site, "about_k_wechat")}：{E(site["wechat"])}</span>
       <span>更新于 {site["built"]}</span>
     </div>
   </div>
@@ -95,18 +114,18 @@ def home(site: dict, featured: list, groups: list) -> str:
   <h1 class="hero-title">{E(site["role"])}<small>{E(site["claim"])}</small></h1>
   <div class="hero-grid">
     <div>
-      <h3>CONTACT</h3>
-      <p><a class="ln" href="mailto:{E(site["email"])}">{E(site["email"])}</a><br>微信：{E(site["wechat"])}</p>
+      <h3>{_f(site, "sec_contact")}</h3>
+      <p><a class="ln" href="mailto:{E(site["email"])}">{E(site["email"])}</a><br>{_f(site, "about_k_wechat")}：{E(site["wechat"])}</p>
     </div>
     <div>
-      <h3>ARCHIVE</h3>
+      <h3>{_f(site, "sec_archive")}</h3>
       <p>共 <b class="n">{total:02d}</b> 篇作品 —— 拆解案 {len(groups[0][2]):02d} 篇 · 策划案 {len(groups[1][2]):02d} 篇</p>
     </div>
   </div>
 </section>
 
 <section class="sec wrap">
-  <div class="sec-head"><h2>精选</h2><span class="count">SELECTED</span></div>
+  <div class="sec-head"><h2>{_f(site, "sec_featured")}</h2><span class="count">SELECTED</span></div>
   <ol class="items">{feat}</ol>
 </section>
 {"".join(blocks)}
@@ -222,17 +241,17 @@ def about(site: dict, blocks: list) -> str:
                    for b in blocks)
     body = f"""<main>
 <div class="page-head">
-  <span class="kicker">ABOUT</span>
+  <span class="kicker">{_f(site, "about_kicker")}</span>
   <h1>{E(site["name_cn"])}</h1>
   <p>{E(site["claim"])}</p>
 </div>
 <div class="about" style="padding-top:48px">
   <div class="about-section">
-    <h3>简介</h3>
+    <h3>{_f(site, "about_bio_head")}</h3>
     {site["bio"]}
   </div>
   <div class="about-section">
-    <h3>信息</h3>
+    <h3>{_f(site, "about_info_head")}</h3>
     <ul class="about-list">{rows}</ul>
   </div>
 </div>
