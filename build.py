@@ -188,9 +188,10 @@ def embed_for(url: str) -> str | None:
 
 def embed_media(html: str) -> str:
     """独立成段、或只带一句前缀的链接（段落或列表项），是视频/可嵌站点就换成播放器。
-    例如「作品展示：<bilibili 链接>」→ 保留「作品展示：」+ 内嵌播放器。"""
+    例如「作品展示：<bilibili 链接>」→ 保留「作品展示：」+ 内嵌播放器。
+    列表项保留 <li> 外壳（否则 <div> 会变成 <ul> 的直接子节点，嵌套非法）。"""
     def fix(m):
-        inner = m.group(2)
+        tag, inner = m.group(1), m.group(2)
         links = A_RE.findall(inner)
         if len(links) != 1 or "<" in A_RE.sub("", inner):
             return m.group(0)
@@ -199,6 +200,8 @@ def embed_media(html: str) -> str:
             return m.group(0)
         prefix = A_RE.sub("", inner).strip()
         label = f'<p class="embed-label">{prefix}</p>' if prefix else ""
+        if tag == "li":
+            return f'<li class="embed-row">{label}{embed}</li>'
         return label + embed
 
     return BLOCK_RE.sub(fix, html)

@@ -630,6 +630,9 @@ a { color: inherit; }
 /* 嵌入前的说明文字（如「作品展示：」）*/
 .embed-label { margin: 26px 0 8px; color: var(--ink-2); font-size: 15px; }
 .embed-label + .embed { margin-top: 0; }
+/* 列表项里的嵌入：去掉项目符号并抵消列表缩进，播放器铺满正文宽度 */
+.doc-body li.embed-row { list-style: none; margin-left: -22px; }
+.doc-body li.embed-row .embed-label { margin-top: 18px; }
 
 /* 没有目录的独立页面：单栏 */
 .detail.no-toc { grid-template-columns: minmax(0, 1fr); }
