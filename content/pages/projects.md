@@ -24,6 +24,7 @@ order: 1
 
 - 编写包含玩法机制与美术设计方向的完整开发文档，搭建关卡白模
 - 作品展示：https://dshzsh.itch.io/azz
+- 作品展示：https://www.bilibili.com/video/BV16ShQeJEAf
 
 ## 吉比特高校游戏开发 GameJam｜策划兼美术 | 2023
 
