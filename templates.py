@@ -101,15 +101,18 @@ def home(site: dict, featured: list, groups: list) -> str:
 
     blocks = []
     for _, cn, items in groups:
+        if not items:
+            continue  # 空栏目不在首页占位；往 content/<栏目>/ 放 md 后自动出现
         # 首页在站点根目录，链接必须带栏目前缀（与列表页的 local 链接相反）
-        body = "".join(_row(n, it) for n, it in enumerate(items, 1)) if items \
-            else _empty("暂无内容。")
+        body = "".join(_row(n, it) for n, it in enumerate(items, 1))
         blocks.append(f"""<section class="sec wrap">
   <div class="sec-head"><h2>{cn}</h2><span class="count">{len(items):02d} 篇</span></div>
   <ol class="items">{body}</ol>
 </section>""")
 
     total = sum(len(i) for _, _, i in groups)
+    tally = " · ".join(f"{cn} {len(items):02d} 篇" for _, cn, items in groups if items)
+    tally_html = f" —— {tally}" if tally else ""
     body = f"""<main>
 <section class="hero">
   <div class="hero-rule"></div>
@@ -121,7 +124,7 @@ def home(site: dict, featured: list, groups: list) -> str:
     </div>
     <div>
       <h3>{_f(site, "sec_archive")}</h3>
-      <p>共 <b class="n">{total:02d}</b> 篇作品 —— 拆解案 {len(groups[0][2]):02d} 篇 · 策划案 {len(groups[1][2]):02d} 篇</p>
+      <p>共 <b class="n">{total:02d}</b> 篇作品{tally_html}</p>
     </div>
   </div>
 </section>

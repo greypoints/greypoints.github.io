@@ -143,19 +143,34 @@ BLOCK_STARTS = ("![", '<p class="fig-cap">')
 
 
 def space_blocks(text: str) -> str:
-    """图片和图注是块级元素，但 md 里常常紧贴上一行写。
-    开了 nl2br 之后它们会被并进上一段，图注甚至会整条丢掉。
+    """图片 / 图注 / 表格都是块级元素，但 md 里常常紧贴上一行写。
+    开了 nl2br 之后图片会被并进上一段，图注甚至会整条丢掉；
+    表格后面紧跟的正文会被 tables 扩展当成表行吞掉。
     这里在它们前后补空行（并折叠多余空行），保证各自独立成块。"""
-    out = []
-    for ln in text.splitlines():
+    lines = text.splitlines()
+    out, in_fence = [], False
+    for i, ln in enumerate(lines):
         s = ln.strip()
+        if FENCE_RE.match(ln):
+            in_fence = not in_fence
+            out.append(ln)
+            continue
+        if in_fence:
+            out.append(ln)
+            continue
         if s.startswith(BLOCK_STARTS):
             if out and out[-1].strip():
                 out.append("")
             out.append(ln)
             out.append("")
-        else:
-            out.append(ln)
+            continue
+        out.append(ln)
+        # 表格行之后如果不再是表格行，补一个空行，
+        # 否则紧跟的正文会被 tables 扩展当成新的一行吞进表格
+        if s.startswith("|"):
+            nxt = next((x for x in lines[i + 1:] if x.strip()), "")
+            if not nxt.strip().startswith("|"):
+                out.append("")
     res = []
     for ln in out:
         if not ln.strip() and res and not res[-1].strip():
