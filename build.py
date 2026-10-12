@@ -32,9 +32,9 @@ PAGES = CONTENT / "pages"   # 独立页面（如「项目经历」）
 SITE = {
     "name_en": "GREYPOINT",
     "name_cn": "灰点",
-    "role": "游戏策划",
-    "claim": "关卡方向：我的拆解案与策划案。",
-    "desc": "灰点的个人作品集：游戏关卡与战斗方向的拆解案、策划案存档。",
+    "role": "灰点的个人页",
+    "claim": "我的项目与设计案。",
+    "desc": "灰点的个人作品集：游戏拆解案、策划案存档。",
     "email": "18272287614@163.com",
     "wechat": "Grey_spot",
     "root": "/",  # 站点根路径；若部署到子目录（如 /blog/）改成 "/blog/"
@@ -392,7 +392,7 @@ def build() -> None:
 
     # 关于页
     about_blocks = [
-        {"k": "方向", "v": SITE["role"] + " · 关卡 / 战斗"},
+        {"k": "方向", "v": SITE["role"] + "关卡策划"},
         {"k": "邮箱", "v": f'<a href="mailto:{SITE["email"]}">{SITE["email"]}</a>'},
         {"k": "微信", "v": SITE["wechat"]},
     ]
