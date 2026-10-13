@@ -181,6 +181,9 @@ def detail(site: dict, *, item: dict, html: str, toc: list,
            prev: dict | None, nxt: dict | None,
            children: list | None = None, parent: dict | None = None) -> str:
     toc_html = _toc_html(toc)
+    # 没有标题的文档不该留一条空的目录栏
+    main_cls = "detail" if toc_html else "detail no-toc"
+    doc_cls = "doc wide" if item.get("wide") else "doc"
 
     pn = []
     if prev:
@@ -217,9 +220,9 @@ def detail(site: dict, *, item: dict, html: str, toc: list,
 """
 
     body = f"""<div class="progress"><i id="progressBar"></i></div>
-<main class="detail">
+<main class="{main_cls}">
 {toc_html}
-<article class="doc">
+<article class="{doc_cls}">
   <div class="doc-head">
     <div class="doc-meta">{"".join(f"<span>{m}</span>" for m in meta if m)}</div>
     <h1>{E(item["title"])}</h1>

@@ -7,6 +7,8 @@ parent: kunitsu-gami
 order: 1
 ---
 
+https://www.bilibili.com/video/BV1Q6WF6EEhw/
+
 ### 一、关卡定位
 - 类型：初期关卡
 - 时长目标：30min/2-3天

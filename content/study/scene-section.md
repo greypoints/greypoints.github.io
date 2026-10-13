@@ -3,6 +3,7 @@ title: 场景截面
 date: 2026-10-13
 tag: 场景
 order: 1
+wide: true
 ---
 
 ![地铁站场景截面：站台与轨道的关系](/assets/img/scene-section/subway-1.jpg)

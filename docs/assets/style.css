@@ -457,6 +457,12 @@ a { color: inherit; }
 
 .doc { max-width: var(--readw); }
 
+/* 宽图模式（frontmatter 写 wide: true）：
+   图片吃满整个内容区，标题与正文仍守在阅读栏宽内，不跟着拉长 */
+.doc.wide { max-width: var(--maxw); }
+.doc.wide .doc-head,
+.doc.wide .doc-body > :not(figure) { max-width: var(--readw); }
+
 /* 文章头部 */
 .doc-head { padding-bottom: 30px; border-bottom: 1px solid var(--ink); }
 .doc-head h1 {

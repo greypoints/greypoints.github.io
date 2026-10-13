@@ -421,6 +421,7 @@ def collect() -> dict:
                 "summary": meta.get("summary", ""),
                 "tag": meta.get("tag", ""),
                 "featured": truthy(meta.get("featured", "false")),
+                "wide": truthy(meta.get("wide", "false")),  # 宽图模式：图片可超出阅读栏宽
                 "parent": (meta.get("parent") or "").strip(),  # 父文档 slug（子文档用）
                 "order": int(meta.get("order") or 999),
                 "source": path, "body": body,
