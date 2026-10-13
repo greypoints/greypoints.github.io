@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>《卡牌公路》设计文档 · 灰点</title>
+<meta name="description" content="第一人称固定视角的驾驶叙事游戏。开着车穿过国道去接多年未见的女儿，用卡牌与路上的人建立联系——油门卡驱动行驶，对话卡推动关系，旅程由一段段偶遇拼成。">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="geo" aria-hidden="true"><i class="geo-dot gd-1"></i><i class="geo-dot gd-2"></i><i class="geo-dot gd-3"></i><i class="geo-dot gd-4"></i><i class="geo-dot gd-5"></i><i class="geo-dot gd-6"></i><i class="geo-dot gd-7"></i><i class="geo-line gl-1"></i><i class="geo-line gl-2"></i></div>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/"><b>GREYPOINT</b> <span>/ 灰点</span></a>
+    <nav class="nav-links"><a class="ln" href="/">首页</a><a class="ln" href="/teardown/">拆解案</a><a class="ln on" href="/design/">策划案</a><a class="ln" href="/projects.html">项目</a><a class="ln" href="/about.html">关于</a></nav>
+  </div>
+</header>
+<div class="progress"><i id="progressBar"></i></div>
+<main class="detail">
+<aside class="toc" id="toc">
+  <div class="toc-h" id="tocToggle">目录</div>
+  <nav><a class="lv2" href="#_1">概述</a><a class="lv2" href="#1">1. 核心循环</a><a class="lv2" href="#2">2. 驾驶系统</a><a class="lv3" href="#_2">油门卡</a><a class="lv3" href="#_3">仪表盘</a><a class="lv3" href="#_4">车内交互物</a><a class="lv3" href="#5">视差滚动（5 层）</a><a class="lv2" href="#3">3. 卡牌系统</a><a class="lv3" href="#_5">交互：拖到不同区域释放有不同效果（不是点击使用）</a><a class="lv2" href="#4">4. 对话系统</a><a class="lv3" href="#npc">NPC 标签匹配</a><a class="lv2" href="#5_1">5. 事件</a><a class="lv2" href="#6">6. 资源与状态</a></nav>
+</aside>
+<article class="doc">
+  <div class="doc-head">
+    <div class="doc-meta"><span>策划案</span><span>2026-10-13</span><span>903 字</span><span>约 2 分钟</span><span><span class="tag">卡牌</span></span></div>
+    <h1>《卡牌公路》设计文档</h1>
+    <p class="summary">第一人称固定视角的驾驶叙事游戏。开着车穿过国道去接多年未见的女儿，用卡牌与路上的人建立联系——油门卡驱动行驶，对话卡推动关系，旅程由一段段偶遇拼成。</p>
+    
+  </div>
+  <div class="doc-body"><h2 id="_1">概述</h2>
+<p><strong>一句话</strong>：坐在驾驶座上，穿过无尽的公路，用卡牌与路上的人建立联系。<br />
+<strong>类型</strong>：第一人称固定视角、驾驶叙事、卡牌对话、像素低保真<br />
+<strong>规模</strong>：PC 1920×1080，3–4 小时，5 个地区、20+ 个 NPC<br />
+<strong>背景故事：</strong> 10年代，路边的老旧设施与新兴城市元素并存，玩家扮演的角色需要开车驶过国道前往海边接多年未见的女儿，一路上收集各种人与事的故事<br />
+<strong>地区流程：</strong> 荒漠→半荒漠平原→城郊工业区→沿海市集→海滨</p>
+<p><strong>核心体验</strong>：沉浸式驾驶，信息靠场景物体传达（仪表盘、后视镜），不另加 HUD 覆盖层；有温度的连接，卡牌成为与人建立联系的语言；旅程即叙事，故事由路上一段段偶遇拼成。<br />
+<strong>参考</strong>：死亡搁浅（旅程感、连接）、Jalopy（车内视角、随机事件）、VA-11 Hall-A（左右分栏、对话驱动）、80 Days（旅途资源管理）、Lonely Mountains（低保真驾驶）<br />
+<strong>大致界面分布</strong></p>
+<figure><img alt="界面分布：左侧为正面路况景色与仪表盘，左下角为手牌区，右侧为人物头像及对话区" src="/assets/img/card-road/ui-layout.png" /></figure>
+<h2 id="1">1. 核心循环</h2>
+<pre class="cjk"><code>行驶（30–60s）
+ ├ 看仪表盘、手牌自用、车内交互
+ └ 右栏提示「前方 500m 有人招手」
+      ├ 不停 → 错过，继续开
+      └ 停车 → 取出油门卡 → 对话（60–120s）
+             ├ 拖对话卡到右栏 → 接受（卡滑入，耐心、距离变化）
+             │              拒绝（弹回抖动）
+             ├ 倒计时结束未出卡 → 耐心 -10
+             └ 距离 &lt;30 → 触发故事，获得奖励卡
+</code></pre>
+<figure><img alt="地区循环：进入新地区 → 路上行驶（可与路边 NPC 对话获得地区特色对话卡）→ 聚集区商店补充物资 → 聚集区主要 NPC 对话可获得特殊故事对话卡 → 离开地区" src="/assets/img/card-road/region-loop.png" /></figure>
+<p>行驶段与对话段，交替出现。停车决策窗口 5–8 秒。</p>
+<h2 id="2">2. 驾驶系统</h2>
+<h3 id="_2">油门卡</h3>
+<p>唯一一张"放到特定位置才生效"的卡，也是驾驶与卡牌两个系统的连接点。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>位置</th>
+<th>车辆状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>手牌区</td>
+<td>停车</td>
+</tr>
+<tr>
+<td>仪表盘凹槽</td>
+<td>自动行驶，油表下降</td>
+</tr>
+<tr>
+<td>凹槽上方</td>
+<td>凹槽发光，准备出发</td>
+</tr>
+</tbody>
+</table></div>
+<p>不可消耗，永远在手牌，玩家不会因缺卡被困住。放卡 = 开车、取卡 = 停车，都是主动行为，强化"我在开车"的主体感。</p>
+<h3 id="_3">仪表盘</h3>
+<p>油表（F→E，&lt;20% 红区）<br />
+速度表（行驶时 60–80 摆动）<br />
+里程表（机械数字轮）<br />
+油门槽</p>
+<h3 id="_4">车内交互物</h3>
+<p>后视镜（看货物、乘客、自己脸色 = 压力）<br />
+CD 机（切 3–4 首 BGM）<br />
+点烟器（联动香烟卡）<br />
+遮阳板（可能夹照片、便条）<br />
+手套箱（收集品）</p>
+<h3 id="5">视差滚动（5 层）</h3>
+<p>天空（极慢）→ 远山（慢）→ 近景（中速）→ 道路（快）→ 路标（最快，还可以标记事件）</p>
+<h2 id="3">3. 卡牌系统</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>消耗规则</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统卡</td>
+<td>不消耗</td>
+<td>油门、搭载</td>
+</tr>
+<tr>
+<td>道具卡</td>
+<td>有次数，用完消失</td>
+<td>香烟(10)、便当(3)</td>
+</tr>
+<tr>
+<td>物品卡</td>
+<td>不消耗，同一 NPC 不可重复</td>
+<td>收音机、工具箱、名片</td>
+</tr>
+<tr>
+<td>对话卡</td>
+<td>不消耗，同一 NPC 不可重复</td>
+<td>聊天气、聊路况</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="_5">交互：拖到不同区域释放有不同效果（不是点击使用）</h3>
+<ul>
+<li><strong>拖到仪表盘区</strong> → 自用：香烟 → 点烟器发光、压力降低；便当 → 副驾出现饭盒；工具箱 → 手套箱打开</li>
+<li><strong>拖到右栏</strong> → 对 NPC 打出：接受则卡滑入、表情变化；拒绝则弹回抖动、回复拒绝</li>
+</ul>
+<p><strong>初始卡组（13 张）</strong>：<br />
+油门<br />
+搭载、工具箱、收音机、褪色合照；<br />
+香烟(10)、薄荷糖(5)、便当(3)、散装酒(3)、热茶(5)；<br />
+聊天气、聊正餐、聊路况</p>
+<p><strong>视觉</strong>：像素卡 120×60px。道具卡牛皮纸色、系统卡墨绿、对话卡淡蓝、特殊卡动态描边，用尽 = 灰 + 斜线</p>
+<h2 id="4">4. 对话系统</h2>
+<p>主题：<strong>"什么是家"的多种答案</strong><br />
+具体数值：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>上限</th>
+<th>触发</th>
+<th>显示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>耐心值</td>
+<td>100</td>
+<td>归零 → 对话结束</td>
+<td>右栏耐心条</td>
+</tr>
+<tr>
+<td>距离感</td>
+<td>100</td>
+<td>&lt;30 → 触发故事结局</td>
+<td>距离条（绿 &lt;30、黄 &lt;50、橙 ≥50）</td>
+</tr>
+<tr>
+<td>倒计时</td>
+<td>每轮 20s</td>
+<td>超时 → 耐心 -10</td>
+<td>数字 + 颜色</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="npc">NPC 标签匹配</h3>
+<p>标签隐藏，玩家靠外观和身份推断。<br />
+例如：抽烟 → 香烟 距离 -10<br />
+好酒 → 散装酒 -10<br />
+喜甜 → 薄荷糖 -8<br />
+隐藏标签奖励观察与共情，并非数值最优解。</p>
+<p><strong>第一地区例子：</strong></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>NPC</th>
+<th>答案</th>
+<th>金句</th>
+<th>奖励（距离 &lt;30）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>老赵</td>
+<td>留守</td>
+<td>"我在这儿干了二十年"</td>
+<td>《旧打火机》</td>
+</tr>
+<tr>
+<td>背包青年</td>
+<td>归来</td>
+<td>"还是觉得家里好"</td>
+<td>《桶装井水》+《家乡》</td>
+</tr>
+<tr>
+<td>白大爷</td>
+<td>守护</td>
+<td>"这口井，叫等子井"</td>
+<td>《老路》+《沙枣》（需用热茶）</td>
+</tr>
+<tr>
+<td>老马</td>
+<td>前行</td>
+<td>"你在这儿。就够了"</td>
+<td>《老马的名片》+《孜然烤馕》</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="5_1">5. 事件</h2>
+<p><strong>主动停车</strong>：NPC 招手、加油站（油表低提醒）、地标观景点、岔路口（左、直、右）<br />
+<strong>被动停车</strong>：油量耗尽、压力 ≥100 强制刹车、车辆故障（爆胎、冒烟）、地区过渡<br />
+<strong>随机事件</strong>：废弃车辆、动物横穿、沙尘暴、路牌留言、收音机信号</p>
+<h2 id="6">6. 资源与状态</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>资源</th>
+<th>上限</th>
+<th>变化</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>燃油</td>
+<td>100</td>
+<td>行驶消耗</td>
+<td>归零抛锚</td>
+</tr>
+<tr>
+<td>压力</td>
+<td>100</td>
+<td>行驶增长</td>
+<td>&gt;90 拒绝对话，=100 强制休息</td>
+</tr>
+<tr>
+<td>饥饿</td>
+<td>100</td>
+<td>缓慢增长</td>
+<td>=100 目眩</td>
+</tr>
+<tr>
+<td>金钱</td>
+<td>—</td>
+<td>加油 50、买卡、修理</td>
+<td>初始 400</td>
+</tr>
+<tr>
+<td>盐</td>
+<td>500 袋</td>
+<td>可出售 5 元/袋</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>尽可能全部信息用场景物体表达，无 HUD 覆盖层</strong></p></div>
+  <div class="doc-foot">
+    <div></div>
+    <a class="back ln" href="./">DESIGN DOC 列表 ↑</a>
+    <div></div>
+  </div>
+</article>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand"><b>GREYPOINT</b> / 灰点</div>
+    <div class="foot-meta">
+      <span>18272287614@163.com</span>
+      <span>微信：Grey_spot</span>
+      <span>更新于 2026-10-13</span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/main.js" defer></script>
+</body>
+</html>
