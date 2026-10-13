@@ -46,6 +46,7 @@ SITE = {
 SECTIONS = {
     "teardown": ("拆解案", "TEARDOWN"),
     "design": ("策划案", "DESIGN DOC"),
+    "study": ("学习记录", "STUDY"),
 }
 
 # 顶栏导航（顺序即显示顺序）；指向栏目目录的末尾要带 /
@@ -53,6 +54,7 @@ NAV = [
     ("", "首页"),
     ("teardown/", "拆解案"),
     ("design/", "策划案"),
+    ("study/", "学习记录"),
     ("projects.html", "项目"),
     ("about.html", "关于"),
 ]
@@ -378,12 +380,20 @@ def clean(cell_html: str) -> str:
     return re.sub(r"\s+", " ", TAGS_RE.sub("", cell_html)).strip()
 
 
+IMG_MD_RE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
+
+
 def stats(text: str) -> tuple[int, int]:
-    """(字数, 预计阅读分钟数)"""
+    """(字数, 预计阅读分钟数)。图片语法（含路径与 alt）不算字数。"""
     plain = re.sub(r"```.*?```", "", text, flags=re.S)
     plain = re.sub(r"`[^`]*`", "", plain)
+    plain = IMG_MD_RE.sub("", plain)
     chars = len(re.sub(r"\s+", "", TAGS_RE.sub("", plain)))
     return chars, max(1, round(chars / 400))
+
+
+def count_imgs(text: str) -> int:
+    return len(IMG_MD_RE.findall(text))
 
 
 # ─────────────────────────── 收集内容 ───────────────────────────
@@ -415,6 +425,7 @@ def collect() -> dict:
                 "order": int(meta.get("order") or 999),
                 "source": path, "body": body,
                 "chars": chars, "minutes": minutes,
+                "imgs": count_imgs(body),
                 "url": f"{key}/{slug}.html",   # 站内根相对
                 "sibling": f"{slug}.html",     # 同目录相对（详情页用）
             })

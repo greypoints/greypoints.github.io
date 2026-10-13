@@ -188,8 +188,11 @@ def detail(site: dict, *, item: dict, html: str, toc: list,
     if nxt:
         pn.append(f'<a class="ln" href="{nxt["sibling"]}">{E(nxt["title"])} →</a>')
 
-    meta = [E(item["section_cn"]), E(item["date"] or ""),
-            f'{item["chars"]:,} 字', f'约 {item["minutes"]} 分钟']
+    meta = [E(item["section_cn"]), E(item["date"] or "")]
+    if item.get("chars", 0) >= 50 or not item.get("imgs"):
+        meta += [f'{item["chars"]:,} 字', f'约 {item["minutes"]} 分钟']
+    else:
+        meta.append(f'{item["imgs"]} 张图')
     if item.get("tag"):
         meta.append(f'<span class="tag">{E(item["tag"])}</span>')
 
@@ -205,7 +208,7 @@ def detail(site: dict, *, item: dict, html: str, toc: list,
         rows = "".join(
             f'<li><a href="{c["sibling"]}">'
             f'<span class="ttl">{E(c["title"])}</span>'
-            f'<span class="meta">{c["chars"]:,} 字 · {c["minutes"]} 分钟</span>'
+            f'<span class="meta">{_measure(c)}</span>'
             f"</a></li>" for c in children)
         kids_html = f"""  <section class="doc-children">
     <h3>{_f(site, "doc_children_head")}</h3>
@@ -304,7 +307,7 @@ def _row(n: int, it: dict, local: bool = False) -> str:
         f'<li{cls}><a href="{href}">'
         f'<span class="idx">{n:02d}</span>'
         f'<span class="ttl">{E(it["title"])}{tag}</span>'
-        f'<span class="meta">{it["chars"]:,} 字 · {it["minutes"]} 分钟</span>'
+        f'<span class="meta">{_measure(it)}</span>'
         f'<span class="date">{E(it["date"] or "")}</span>'
         f"</a></li>"
     )
@@ -312,6 +315,13 @@ def _row(n: int, it: dict, local: bool = False) -> str:
 
 def _empty(msg: str) -> str:
     return f'<li class="empty">{msg}</li>'
+
+
+def _measure(it: dict) -> str:
+    """体量标签：正文够长就报字数与时长；纯图文档改报图数（「0 字」没有意义）"""
+    if it.get("chars", 0) >= 50 or not it.get("imgs"):
+        return f'{it["chars"]:,} 字 · {it["minutes"]} 分钟'
+    return f'{it["imgs"]} 张图'
 
 
 def _plain(text: str) -> str:

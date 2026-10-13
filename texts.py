@@ -43,6 +43,7 @@ KEY_DEFS = [
     ("nav_3", "顶栏导航", "第 3 项导航文字", "nav:2"),
     ("nav_4", "顶栏导航", "第 4 项导航文字", "nav:3"),
     ("nav_5", "顶栏导航", "第 5 项导航文字", "nav:4"),
+    ("nav_6", "顶栏导航", "第 6 项导航文字", "nav:5"),
 
     # 栏目
     ("sec_teardown_cn", "栏目", "「拆解案」栏目名", "sections:teardown:0"),
@@ -51,6 +52,9 @@ KEY_DEFS = [
     ("sec_design_cn", "栏目", "「策划案」栏目名", "sections:design:0"),
     ("sec_design_en", "栏目", "「策划案」英文小标签", "sections:design:1"),
     ("sec_design_intro", "栏目", "「策划案」列表页标题下的导语（可留空）", "sections:design:2"),
+    ("sec_study_cn", "栏目", "「学习记录」栏目名", "sections:study:0"),
+    ("sec_study_en", "栏目", "「学习记录」英文小标签", "sections:study:1"),
+    ("sec_study_intro", "栏目", "「学习记录」列表页标题下的导语（可留空）", "sections:study:2"),
 
     # 关于页
     ("about_kicker", "关于页", "关于页左上角小标签", "fixed:about_kicker"),
