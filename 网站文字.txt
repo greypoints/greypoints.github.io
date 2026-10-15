@@ -21,7 +21,7 @@ name_cn：灰点
 role：灰点的个人页
 # 大标题下面的小字／副标题
 claim：我的项目与设计案
-# 首屏「个人项目」入口的小标题
+# 「个人项目」区块的标题
 sec_projects：个人项目
 # 「联系方式」小标题
 sec_contact：CONTACT

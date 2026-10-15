@@ -93,7 +93,7 @@ def page(site: dict, *, title: str, nav_active: str, body: str,
 # ---------- 首页 ----------
 
 def home(site: dict, groups: list, proj: dict | None = None) -> str:
-    """groups: [(section_key, 中文名, [item, ...])]；proj: 首屏「个人项目」入口指向的独立页面"""
+    """groups: [(section_key, 中文名, [item, ...])]；proj: 「个人项目」区块指向的独立页面"""
     blocks = []
     for _, cn, items in groups:
         if not items:
@@ -109,14 +109,16 @@ def home(site: dict, groups: list, proj: dict | None = None) -> str:
     tally = " · ".join(f"{cn} {len(items):02d} 篇" for _, cn, items in groups if items)
     tally_html = f" —— {tally}" if tally else ""
 
-    # 首屏第三格：跳去「个人项目」页（content/pages/ 里 slug = projects 的那篇）
-    proj_html = ""
+    # 「个人项目」区块：和拆解案/策划案同构（26px 大标题 + 行式列表），
+    # 内容只有一行，点进 content/pages/ 里 slug = projects 的那一页。
+    proj_sec = ""
     if proj:
-        proj_html = f"""    <div>
-      <h3>{_f(site, "sec_projects")}</h3>
-      <p><a class="ln" href="{site["root"]}{proj["slug"]}.html">{E(proj["title"])} →</a></p>
-    </div>
-"""
+        n = proj.get("sections", 0)
+        meta = f'<span class="meta">{n} 个项目</span>' if n else ""
+        proj_sec = f"""<section class="sec wrap">
+  <div class="sec-head"><h2>{_f(site, "sec_projects")}</h2><span class="count">PROJECTS</span></div>
+  <ol class="items"><li><a href="{site["root"]}{proj["slug"]}.html"><span class="idx">01</span><span class="ttl">{E(proj["title"])}</span>{meta}<span class="date"></span></a></li></ol>
+</section>"""
 
     body = f"""<main>
 <section class="hero">
@@ -131,10 +133,10 @@ def home(site: dict, groups: list, proj: dict | None = None) -> str:
       <h3>{_f(site, "sec_archive")}</h3>
       <p>共 <b class="n">{total:02d}</b> 篇作品{tally_html}</p>
     </div>
-{proj_html}  </div>
+  </div>
 </section>
 
-{"".join(blocks)}
+{proj_sec}{"".join(blocks)}
 </main>"""
     return page(site, title=site.get("title_home") or f'{site["name_cn"]} {site["name_en"]} · {site["role"]}',
                 nav_active="", body=body, desc=site["desc"])

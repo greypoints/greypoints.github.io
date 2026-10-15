@@ -62,7 +62,7 @@ NAV = [
 
 # 模板里的固定文字（默认值；可被 网站文字.txt 覆盖）
 FIXED = {
-    "sec_projects": "个人项目",  # 首页首屏「个人项目」入口的小标题
+    "sec_projects": "个人项目",  # 首页「个人项目」区块的标题
     "sec_contact": "CONTACT",
     "sec_archive": "ARCHIVE",
     "about_kicker": "ABOUT",
@@ -447,6 +447,8 @@ def collect_pages() -> list:
             "label": meta.get("label", ""),
             "summary": meta.get("summary", ""),
             "body": body,
+            # 页面里 ## 二级标题的个数（首页「个人项目」区块用它报条数）
+            "sections": len(re.findall(r"^##\s+\S", body, re.M)),
             "order": int(meta.get("order") or 999),
         })
     pages.sort(key=lambda p: (p["order"], p["slug"]))

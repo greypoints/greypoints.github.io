@@ -33,7 +33,7 @@ KEY_DEFS = [
     # 首页
     ("role", "首页", "首屏大标题", "site:role"),
     ("claim", "首页", "大标题下面的小字／副标题", "site:claim"),
-    ("sec_projects", "首页", "首屏「个人项目」入口的小标题", "fixed:sec_projects"),
+    ("sec_projects", "首页", "「个人项目」区块的标题", "fixed:sec_projects"),
     ("sec_contact", "首页", "「联系方式」小标题", "fixed:sec_contact"),
     ("sec_archive", "首页", "「存档」小标题", "fixed:sec_archive"),
 
