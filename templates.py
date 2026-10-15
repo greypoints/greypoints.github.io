@@ -9,7 +9,7 @@ from html import escape as E
 
 # 模板固定文字的兜底默认值（正常由 build.py 的 FIXED + 网站文字.txt 提供）
 _FIXED_DEFAULT = {
-    "sec_featured": "精选",
+    "sec_projects": "个人项目",
     "sec_contact": "CONTACT",
     "sec_archive": "ARCHIVE",
     "about_kicker": "ABOUT",
@@ -92,13 +92,8 @@ def page(site: dict, *, title: str, nav_active: str, body: str,
 
 # ---------- 首页 ----------
 
-def home(site: dict, featured: list, groups: list) -> str:
-    """featured: [(item, index)]；groups: [(section_key, 中文名, [item, ...])]"""
-    if featured:
-        feat = "".join(_row(i + 1, it) for i, (it, _) in enumerate(featured))
-    else:
-        feat = _empty("暂无作品。")
-
+def home(site: dict, groups: list, proj: dict | None = None) -> str:
+    """groups: [(section_key, 中文名, [item, ...])]；proj: 首屏「个人项目」入口指向的独立页面"""
     blocks = []
     for _, cn, items in groups:
         if not items:
@@ -113,6 +108,16 @@ def home(site: dict, featured: list, groups: list) -> str:
     total = sum(len(i) for _, _, i in groups)
     tally = " · ".join(f"{cn} {len(items):02d} 篇" for _, cn, items in groups if items)
     tally_html = f" —— {tally}" if tally else ""
+
+    # 首屏第三格：跳去「个人项目」页（content/pages/ 里 slug = projects 的那篇）
+    proj_html = ""
+    if proj:
+        proj_html = f"""    <div>
+      <h3>{_f(site, "sec_projects")}</h3>
+      <p><a class="ln" href="{site["root"]}{proj["slug"]}.html">{E(proj["title"])} →</a></p>
+    </div>
+"""
+
     body = f"""<main>
 <section class="hero">
   <div class="hero-rule"></div>
@@ -126,13 +131,9 @@ def home(site: dict, featured: list, groups: list) -> str:
       <h3>{_f(site, "sec_archive")}</h3>
       <p>共 <b class="n">{total:02d}</b> 篇作品{tally_html}</p>
     </div>
-  </div>
+{proj_html}  </div>
 </section>
 
-<section class="sec wrap">
-  <div class="sec-head"><h2>{_f(site, "sec_featured")}</h2><span class="count">SELECTED</span></div>
-  <ol class="items">{feat}</ol>
-</section>
 {"".join(blocks)}
 </main>"""
     return page(site, title=site.get("title_home") or f'{site["name_cn"]} {site["name_en"]} · {site["role"]}',

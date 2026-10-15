@@ -33,7 +33,7 @@ KEY_DEFS = [
     # 首页
     ("role", "首页", "首屏大标题", "site:role"),
     ("claim", "首页", "大标题下面的小字／副标题", "site:claim"),
-    ("sec_featured", "首页", "「精选」区块的标题", "fixed:sec_featured"),
+    ("sec_projects", "首页", "首屏「个人项目」入口的小标题", "fixed:sec_projects"),
     ("sec_contact", "首页", "「联系方式」小标题", "fixed:sec_contact"),
     ("sec_archive", "首页", "「存档」小标题", "fixed:sec_archive"),
 
@@ -135,7 +135,7 @@ def parse(site: dict, sections: dict, nav: list, fixed: dict) -> tuple[dict, lis
     merged_nav = [(href, got.get(f"nav_{i}", label)) for i, (href, label) in enumerate(nav, 1)]
 
     merged_fixed = {
-        "sec_featured": got["sec_featured"],
+        "sec_projects": got["sec_projects"],
         "sec_contact": got["sec_contact"],
         "sec_archive": got["sec_archive"],
         "about_kicker": got["about_kicker"],

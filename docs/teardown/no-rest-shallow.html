@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>《恶意不息》章节一：浅滩关卡拆解 · 灰点</title>
+<meta name="description" content="从美术风格、垂直空间与中央枢纽三条设计特征切入，逐节点拆解《恶意不息》开场章节「浅滩」的完整动线与五层引导体系，并给出三条可落地的改动方案。">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="geo" aria-hidden="true"><i class="geo-dot gd-1"></i><i class="geo-dot gd-2"></i><i class="geo-dot gd-3"></i><i class="geo-dot gd-4"></i><i class="geo-dot gd-5"></i><i class="geo-dot gd-6"></i><i class="geo-dot gd-7"></i><i class="geo-line gl-1"></i><i class="geo-line gl-2"></i></div>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/"><b>GREYPOINT</b> <span>/ 灰点</span></a>
+    <nav class="nav-links"><a class="ln" href="/">首页</a><a class="ln on" href="/teardown/">拆解案</a><a class="ln" href="/design/">策划案</a><a class="ln" href="/study/">学习记录</a><a class="ln" href="/projects.html">项目</a><a class="ln" href="/about.html">关于</a></nav>
+  </div>
+</header>
+<div class="progress"><i id="progressBar"></i></div>
+<main class="detail">
+<aside class="toc" id="toc">
+  <div class="toc-h" id="tocToggle">目录</div>
+  <nav><a class="lv2" href="#_1">一、游戏概况</a><a class="lv2" href="#_2">二、关卡设计特征</a><a class="lv3" href="#1">1）美术风格</a><a class="lv3" href="#2">2）垂直空间</a><a class="lv3" href="#3-sacrament">3）圣城 Sacrament 作为中央枢纽</a><a class="lv2" href="#_3">三、具体拆解：开场章节全流程</a><a class="lv3" href="#_4">主要动线图</a><a class="lv3" href="#_5">流程详解</a><a class="lv3" href="#5">引导方式汇总（5 层）</a><a class="lv3" href="#bosswarrick-the-torn-boss">Boss：Warrick the Torn（第一个 Boss）</a><a class="lv2" href="#_6">四、对关卡设计的启发</a><a class="lv3" href="#_7">关联思考</a><a class="lv2" href="#_9">五、修改</a></nav>
+</aside>
+<article class="doc">
+  <div class="doc-head">
+    <div class="doc-meta"><span>拆解案</span><span>2026-10-15</span><span>3,628 字</span><span>约 9 分钟</span><span><span class="tag">关卡拆解</span></span></div>
+    <h1>《恶意不息》章节一：浅滩关卡拆解</h1>
+    <p class="summary">从美术风格、垂直空间与中央枢纽三条设计特征切入，逐节点拆解《恶意不息》开场章节「浅滩」的完整动线与五层引导体系，并给出三条可落地的改动方案。</p>
+    
+  </div>
+  <div class="doc-body"><h2 id="_1">一、游戏概况</h2>
+<p><strong>类型</strong>：3D 等距俯视视角 ARPG（类魂 + 类暗黑）</p>
+<p>玩家扮演流落圣城的古老种族塞利姆的战士，围绕国王驾崩后爆发的「灾疠」瘟疫展开，在政治阴谋与瘟疫肆虐中寻求救赎，净化岛屿拯救人民。</p>
+<p><strong>主要循环</strong>：</p>
+<ol>
+<li>战斗探索 → 回城强化 → 战斗</li>
+<li>探索时收集资源 → 升级建筑 → 获得更多强化</li>
+</ol>
+<h2 id="_2">二、关卡设计特征</h2>
+<h3 id="1">1）美术风格</h3>
+<p>主美 Mikhail Rakhmatullin 透露核心原则是 "painting comes to life"，参考卡拉瓦乔明暗、19 世纪俄国画家，贴图全手绘（<a href="https://80.lv/articles/interview-inside-the-tech-and-artistic-inspirations-of-no-rest-for-the-wicked-from-moon-studios">80.lv</a>）。</p>
+<figure><img alt="卡拉瓦乔式强明暗与轮廓光下的场景构图" src="/assets/img/no-rest-shallow/art-01.jpg" /></figure>
+<figure><img alt="全手绘贴图的场景细节" src="/assets/img/no-rest-shallow/art-02.jpg" /></figure>
+<p><strong>设计影响</strong>：每个场景的构图、明暗、可交互物位置都是设计者「画」出来的，设计者确定玩家在每一个位置能看见什么，这也是它使用固定镜头的前提。</p>
+<h3 id="2">2）垂直空间</h3>
+<p>IGN 评测：可攀爬 / 跳跃 / 平衡之处数量惊人，在等距关卡设计中不常见。大量出现爬藤蔓、爬梯子、踢梯子开捷径、走窄木板、跳浮台。</p>
+<p>不过这样也存在问题：固定镜头下高度差与距离差难以判断，造成玩家多次误判摔死。</p>
+<h3 id="3-sacrament">3）圣城 Sacrament 作为中央枢纽</h3>
+<ul>
+<li>地图中央唯一庇护所，每个区域都有捷径回城，初始状态下传送只能选择圣城或上一个传送点</li>
+<li>城镇升级：找建筑师 Danos 升级圣城建筑，有视觉变化，开放更多货品。可购房装修、野外探索搜集建造材料：砍树挖矿</li>
+<li>技术上靠 chunk 热替换实现，动态加载每个较小的区域</li>
+</ul>
+<figure><img alt="圣城 Sacrament 作为地图中央的唯一庇护所" src="/assets/img/no-rest-shallow/sacrament.jpg" /></figure>
+<h2 id="_3">三、具体拆解：开场章节全流程</h2>
+<p>关卡节奏：引入 → 加压 → 喘息 → 高压 → 归巢</p>
+<h3 id="_4">主要动线图</h3>
+<figure><img alt="开场章节完整动线图，绿色方块为可选探索区域" src="/assets/img/no-rest-shallow/flow-map.jpg" /></figure>
+<p>绿色方块为可选探索区域。</p>
+<h3 id="_5">流程详解</h3>
+<p>此时已在船上完成基础操作教学，进入大地图。基础操作包括：基础移动、跑跳、战斗、可破坏物、战利品拾取、狭窄处贴身行动。</p>
+<p><strong>【节点 1】海滩（船难点）</strong>：船长 Talvic 指引，给任务目标：抵达 Sacrament。</p>
+<figure><img alt="节点 1：海滩与船长 Talvic 的任务指引" src="/assets/img/no-rest-shallow/n01-beach.jpg" /></figure>
+<p><strong>【节点 2】第一个存档点 whisper 附近</strong>：首次出现时教学，藤蔓：攀爬、宝箱、火堆：烹饪、存档点：重生、钓鱼（可选）、掉落装备。</p>
+<figure><img alt="节点 2：第一个低语点与周边可交互物" src="/assets/img/no-rest-shallow/n02-whisper.jpg" /></figure>
+<figure><img alt="低语点旁的引导线" src="/assets/img/no-rest-shallow/n02-guide-line.jpg" /><figcaption>靠近低语点时玩家身上出现引导线</figcaption></figure>
+
+<figure><img alt="低语点旁通往塔顶的梯子" src="/assets/img/no-rest-shallow/n02-ladder.jpg" /></figure>
+<p>低语点旁就是梯子通往塔顶，塔顶断桥前方放置一个精英怪与宝箱，极有可能成为玩家的初次死亡体验，从而告诉玩家在低语点重生与装备耐久度的设定。因为是断桥敌人无法来到低语点一侧，所以玩家可以主动选择挑战与否。</p>
+<figure><img alt="塔顶断桥前方的精英怪与宝箱" src="/assets/img/no-rest-shallow/n02-bridge-elite.jpg" /></figure>
+<p><strong>【节点 3】初入水手寨</strong></p>
+<p>教学：潜行背刺、开阔场地遭遇战。</p>
+<p>潜行时，镜头距离随敌人距离变小而拉近，营造紧张与压迫感。</p>
+<figure><img alt="潜行时镜头随敌人距离拉近" src="/assets/img/no-rest-shallow/n03-stealth-1.jpg" /></figure>
+<figure><img alt="水手寨的潜行与遭遇战区域" src="/assets/img/no-rest-shallow/n03-stealth-2.jpg" /></figure>
+<p>探索广场发现广场左下方小区域存在怪物，玩家很可能本能后退，从而来到广场战斗，玩家自然学会拉扯与风筝，发现在开阔地区战斗更有优势。</p>
+<figure><img alt="广场左下方的小区域与开阔战斗场地" src="/assets/img/no-rest-shallow/n03-plaza.jpg" /></figure>
+<p>广场上方有两条支路，通过长台阶暗示玩家是通向下一区域的。</p>
+<figure><img alt="广场上方的两条支路与长台阶" src="/assets/img/no-rest-shallow/n03-stairs.jpg" /></figure>
+<p><strong>【节点 4】（分支）毁坏塔楼</strong></p>
+<p>教学：前进自然看见左侧可拾取物从而教学爬窄木板。引入远程威胁弓箭手与火球投掷者，迫使玩家反应瞬时危险。</p>
+<figure><img alt="毁坏塔楼：窄木板与远程威胁" src="/assets/img/no-rest-shallow/n04-tower.jpg" /></figure>
+<p>第一次踢到梯子打开捷径，玩家下梯子会发现回到浅滩，塑造认知：够不到的梯子 = 继续探索回来时可以开的捷径。第一次认识门锁与钥匙。</p>
+<figure><img alt="踢梯子打开的捷径" src="/assets/img/no-rest-shallow/n04-lock-1.jpg" /></figure>
+<figure><img alt="第一次遇到的门锁与钥匙" src="/assets/img/no-rest-shallow/n04-lock-2.jpg" /></figure>
+<p><strong>【节点 5】Mariner's Keep 外围</strong></p>
+<p>两条支路收束联通，若走破碎塔楼则在上层，若走正面则在下层，统一收束到中层，到达第二个 Whisper。</p>
+<figure><img alt="两条支路收束到中层，抵达第二个低语点" src="/assets/img/no-rest-shallow/n05-keep.jpg" /></figure>
+<p><strong>【节点 6】大柴堆区域铁匠铺任务</strong></p>
+<p>大柴堆这里的设计很舒服，整个蓝色线条以上的为二层空间，本来只能老老实实走左侧箭头处的台阶从一层到二层，但是右侧箭头这里放了一个倾斜向上的板车，让二层空间破开一道口子，从而让玩家能更方便地上到二层。</p>
+<figure><img alt="大柴堆区域：左侧台阶与右侧板车两条上二层的路径" src="/assets/img/no-rest-shallow/n06-campfire.jpg" /></figure>
+<figure><img alt="倾斜向上的板车" src="/assets/img/no-rest-shallow/n06-plank.jpg" /></figure>
+<p>靠近下方时出现声音与字幕提醒，触发 NPC 解救任务，完成遭遇战可以找铁匠 NPC 修理装备，且可以用烤炉补充食物。</p>
+<figure><img alt="铁匠铺解救任务的触发点" src="/assets/img/no-rest-shallow/n06-smith-1.jpg" /></figure>
+<figure><img alt="可以补充食物的烤炉" src="/assets/img/no-rest-shallow/n06-smith-2.jpg" /></figure>
+<p>靠近可以看见房屋内情况，但发现需要钥匙。铁匠铺钥匙在闸门下方不远处，前进寻找铁匠铺钥匙的路上，发现前路被锁，这里不停给与玩家新的目标，让玩家保持新鲜感。通过 NPC 的口第一次暗示玩家前方的挑战。</p>
+<figure><img alt="通过 NPC 对话第一次暗示前方的挑战" src="/assets/img/no-rest-shallow/n06-hint.jpg" /></figure>
+<p><strong>【节点 7】闸门后 → 木质吊桥</strong></p>
+<p>收集钥匙通过闸门后遭遇战，来到吊桥前。</p>
+<figure><img alt="通过闸门后的木质吊桥" src="/assets/img/no-rest-shallow/n07-gate.jpg" /></figure>
+<p>前方（左边）是没有打开的吊桥，上方经典的开放电梯，下方可以回到浅滩，打开第二个单向桥。走开放电梯前往下层，通过下层通路走藤蔓回到中层，再使用电梯去到上层前往吊桥对岸，从而用一个按钮与两层平台的电梯串联起垂直的三层空间。</p>
+<figure><img alt="用一个按钮与两层平台的电梯串联起三层垂直空间" src="/assets/img/no-rest-shallow/n07-lift.jpg" /></figure>
+<p><strong>【节点 8】Lara &amp; Reed 火堆 + 低语点</strong></p>
+<p>叙事：警告前方有怪物。</p>
+<figure><img alt="节点 8：火堆与第三个低语点" src="/assets/img/no-rest-shallow/n08-campfire.jpg" /></figure>
+<p>出现第三个低语点为 boss 战准备，且死亡一次后铁匠会出现在低语点旁，为玩家提供装备修复，允许反复试错。</p>
+<p><strong>【节点 9】Warrick the Torn（第一个 Boss）</strong></p>
+<p>高潮 boss 战。</p>
+<p><strong>【节点 10】Sacrament 进城门</strong></p>
+<p>进圣城交任务、整备。</p>
+<p>随关卡推进战斗强度逐级抬升，允许玩家快速推进也可以慢慢四处探索先升级再推进。</p>
+<h3 id="5">引导方式汇总（5 层）</h3>
+<ol>
+<li><strong>视觉</strong>：卡拉瓦乔式强明暗与轮廓光让可交互物与出口被明显标识出来（<a href="https://80.lv/articles/interview-inside-the-tech-and-artistic-inspirations-of-no-rest-for-the-wicked-from-moon-studios">80.lv</a>）</li>
+<li><strong>地形</strong>：固定镜头使团队能预判玩家视野，精确布置攀爬点与兴趣点，操纵规划玩家路径</li>
+<li><strong>声音</strong>：节点 7 用 Filmore 的声音把玩家从主干拽进铁匠铺</li>
+<li><strong>游戏内目标</strong>：主线任务指引 + 路牌与人物对话指引</li>
+<li><strong>复活点锚定</strong>：本节主线路径上三个 Whisper（节点 2 / 5 / 8）：教学时一个、主干中点一个、Boss 门口一个；火堆作为补给点（<a href="https://norestforthewicked.wiki.fextralife.com/Combat">Combat 页面</a>）</li>
+</ol>
+<h3 id="bosswarrick-the-torn-boss">Boss：Warrick the Torn（第一个 Boss）</h3>
+<ul>
+<li>作为首个 Boss，招式有限：①冲刺 + 下劈（起手明显，有充足反应时间）②旋转刀刃（需完美时机闪避）③高前摇大范围 AOE</li>
+<li>攻击「有破坏力但都有闪避 / 反击窗口」</li>
+</ul>
+<hr />
+<h2 id="_6">四、对关卡设计的启发</h2>
+<ol>
+<li><strong>「玩家死后敌人不立刻刷新」是重要的关卡资源</strong>：把死亡惩罚从「重打」变为「机会损失」，鼓励玩家在每次战斗中先杀残血，让玩家的风筝、引导怪物的每一步都有意义，所以可以设置更多开阔场地与平台，是改变玩家决策树的机制创新。</li>
+<li><strong>垂直探索</strong>：固定镜头与高台会导致判距困难。<strong>教训</strong>：垂直关卡必须给足够的判距提示（阴影、边缘高亮、固定视角下的尺寸参照物），否则挫败感会压过探索欲。</li>
+<li><strong>枢纽镇给与玩家休息空间锚点</strong>：单一庇护所 + 捷径网构成「出发 - 回家 - 整备」循环；商店升级有实际变化，让玩家积攒资源获取的升级得到反馈。</li>
+<li><strong>固定镜头当作设计约束而非缺陷</strong>：锁死摄影机让团队能「预知玩家视野」，精确布置引导 / 光照。镜头自由度很大程度上引导设计思路，越早锁定越好。</li>
+</ol>
+<h3 id="_7">关联思考</h3>
+<ul>
+<li>ARPG 的基因是 build 成长与战利品经济，则派发战利品的怪是可再生的资源</li>
+</ul>
+<h4 id="_8">死亡重生与玩家学习</h4>
+<ul>
+<li>大部分 ARPG 的死亡：回到几秒前的检查点，成本极低。为了让玩家学习这一个操作 / 这一关卡的通关方式</li>
+<li>类魂的死亡：回到这条路的起点，让玩家规划整条路的行动与资源管理；惩罚：身上的所有货币</li>
+<li>恶意不息：回到路的起点，但每杀掉一个怪物都会让这条路更轻松；惩罚：可用金币修复的装备耐久值</li>
+</ul>
+<h2 id="_9">五、修改</h2>
+<ol>
+<li><strong>垂直落差加「两档提示」</strong>：固定镜头下高台落差难判断。我会在落差超过摔死阈值的边缘显示落点阴影，只有危险落差才显示，保留探索风险的同时尽可能消除不公平感。成本：纯表现层，不动关卡几何。</li>
+<li><strong>野外换皮刷新与镇子升级联动</strong>：原作清空区域在升级后会刷出更强敌人。我会把刷新条件从「角色等级」改为与圣城建筑升级等级挂钩：升一次建筑，敌人强化一次，让变化反馈从商店货架延伸到野外，也更给玩家更多升级圣城的动力。</li>
+<li><strong>给门锁遭遇战加可选侦查点</strong>：原作围绕「死亡前先杀残血」做策略。我会在闸门前放一个高处瞭望位，让玩家提前看到门后敌人配置，这样「先杀谁」的规划从死后复盘提前到战前。</li>
+</ol>
+<p>参考：<a href="https://en.wikipedia.org/wiki/No_Rest_for_the_Wicked_(video_game)">Wikipedia</a>、<a href="https://store.steampowered.com/app/1371980/No_Rest_for_the_Wicked/">Steam 商店页</a>、<a href="https://norestforthewicked.wiki.fextralife.com/No+Rest+for+the+Wicked+Wiki">Fextralife Wiki</a></p></div>
+  <div class="doc-foot">
+    <div><a class="ln" href="kunitsu-gami-whitebox-01.html">← 祇·女神之路 关卡重构 1 白盒设计文档</a></div>
+    <a class="back ln" href="./">TEARDOWN 列表 ↑</a>
+    <div></div>
+  </div>
+</article>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand"><b>GREYPOINT</b> / 灰点</div>
+    <div class="foot-meta">
+      <span>18272287614@163.com</span>
+      <span>微信：Grey_spot</span>
+      <span>更新于 2026-10-15</span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/main.js" defer></script>
+</body>
+</html>

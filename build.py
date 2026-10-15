@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parent
 CONTENT = ROOT / "content"
 OUT = ROOT / "docs"
 PAGES = CONTENT / "pages"   # 独立页面（如「项目经历」）
+PROJECTS_SLUG = "projects"  # 首页首屏「个人项目」入口指向的独立页面 slug
 
 # ─────────────────────────── 站点信息（改这里） ───────────────────────────
 
@@ -59,11 +60,9 @@ NAV = [
     ("about.html", "关于"),
 ]
 
-FEATURED_LIMIT = 3  # 首页精选条数
-
 # 模板里的固定文字（默认值；可被 网站文字.txt 覆盖）
 FIXED = {
-    "sec_featured": "精选",
+    "sec_projects": "个人项目",  # 首页首屏「个人项目」入口的小标题
     "sec_contact": "CONTACT",
     "sec_archive": "ARCHIVE",
     "about_kicker": "ABOUT",
@@ -420,7 +419,6 @@ def collect() -> dict:
                 "date": meta.get("date", ""),
                 "summary": meta.get("summary", ""),
                 "tag": meta.get("tag", ""),
-                "featured": truthy(meta.get("featured", "false")),
                 "wide": truthy(meta.get("wide", "false")),  # 宽图模式：图片可超出阅读栏宽
                 "parent": (meta.get("parent") or "").strip(),  # 父文档 slug（子文档用）
                 "order": int(meta.get("order") or 999),
@@ -538,7 +536,8 @@ def build() -> None:
         (OUT / it["section"] / f'{it["slug"]}.html').write_text(page, encoding="utf-8")
 
     # 独立页面（content/pages/*.md）
-    for pg in collect_pages():
+    pages = collect_pages()
+    for pg in pages:
         html, toc = render_md(pg["body"])
         (OUT / f'{pg["slug"]}.html').write_text(
             T.standalone(site, pg=pg, html=html, toc=toc), encoding="utf-8")
@@ -552,13 +551,10 @@ def build() -> None:
         (OUT / key / "index.html").write_text(
             T.listing(site, key=key, cn=cn, en=en, intro=intro, items=mine), encoding="utf-8")
 
-    # 首页（精选：featured 优先，不足则用最新补齐；子文档不单独进精选）
-    top = [x for x in items if not x["parent"]]
-    chosen = [x for x in top if x["featured"]][:FEATURED_LIMIT]
-    if len(chosen) < FEATURED_LIMIT:
-        chosen += [x for x in top if x not in chosen][:FEATURED_LIMIT - len(chosen)]
+    # 首页：首屏多一个「个人项目」入口，指向 content/pages/ 里的那一页
+    proj_page = next((p for p in pages if p["slug"] == PROJECTS_SLUG), None)
     (OUT / "index.html").write_text(
-        T.home(site, [(x, i) for i, x in enumerate(chosen)], groups), encoding="utf-8")
+        T.home(site, groups, proj_page), encoding="utf-8")
 
     # 关于页
     about_blocks = [
