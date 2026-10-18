@@ -92,8 +92,10 @@ def page(site: dict, *, title: str, nav_active: str, body: str,
 
 # ---------- 首页 ----------
 
-def home(site: dict, groups: list, proj: dict | None = None) -> str:
-    """groups: [(section_key, 中文名, [item, ...])]；proj: 「个人项目」区块指向的独立页面"""
+def home(site: dict, groups: list, proj_pages: list = None) -> str:
+    """groups: [(section_key, 中文名, [item, ...])]
+    proj_pages: content/pages/ 下的独立页面；每个渲染成「个人项目」区块的一行"""
+    proj_pages = proj_pages or []
     blocks = []
     for _, cn, items in groups:
         if not items:
@@ -109,15 +111,21 @@ def home(site: dict, groups: list, proj: dict | None = None) -> str:
     tally = " · ".join(f"{cn} {len(items):02d} 篇" for _, cn, items in groups if items)
     tally_html = f" —— {tally}" if tally else ""
 
-    # 「个人项目」区块：和拆解案/策划案同构（26px 大标题 + 行式列表），
-    # 内容只有一行，点进 content/pages/ 里 slug = projects 的那一页。
+    # 「个人项目」区块：和拆解案/策划案同构（26px 大标题 + 行式列表）。
+    # content/pages/ 下每个独立页面渲染一行；有几页就几行，不用改代码。
     proj_sec = ""
-    if proj:
-        n = proj.get("sections", 0)
-        meta = f'<span class="meta">{n} 个项目</span>' if n else ""
+    if proj_pages:
+        rows = "".join(
+            f'<li><a href="{site["root"]}{p["slug"]}.html">'
+            f'<span class="idx">{n:02d}</span>'
+            f'<span class="ttl">{E(p["title"])}</span>'
+            f'<span class="meta">{p["meta"]}</span>'
+            f'<span class="date"></span></a></li>'
+            for n, p in enumerate(proj_pages, 1)
+        )
         proj_sec = f"""<section class="sec wrap">
   <div class="sec-head"><h2>{_f(site, "sec_projects")}</h2><span class="count">PROJECTS</span></div>
-  <ol class="items"><li><a href="{site["root"]}{proj["slug"]}.html"><span class="idx">01</span><span class="ttl">{E(proj["title"])}</span>{meta}<span class="date"></span></a></li></ol>
+  <ol class="items">{rows}</ol>
 </section>"""
 
     body = f"""<main>

@@ -553,10 +553,19 @@ def build() -> None:
         (OUT / key / "index.html").write_text(
             T.listing(site, key=key, cn=cn, en=en, intro=intro, items=mine), encoding="utf-8")
 
-    # 首页：首屏多一个「个人项目」入口，指向 content/pages/ 里的那一页
-    proj_page = next((p for p in pages if p["slug"] == PROJECTS_SLUG), None)
+    # 首页「个人项目」区块：content/pages/ 下每个独立页面渲染一行
+    proj_pages = []
+    for pg in pages:
+        n = pg.get("sections", 0)
+        if n:
+            meta = f'{n} 个条目'
+        elif pg.get("label"):
+            meta = pg["label"]
+        else:
+            meta = ""
+        proj_pages.append({**pg, "meta": meta})
     (OUT / "index.html").write_text(
-        T.home(site, groups, proj_page), encoding="utf-8")
+        T.home(site, groups, proj_pages), encoding="utf-8")
 
     # 关于页
     about_blocks = [
