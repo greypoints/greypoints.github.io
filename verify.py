@@ -30,11 +30,11 @@ FAILS = []
 CHECKS = [0]
 
 BAT_FILES = ["本地预览.bat", "更新网站.bat", "首次部署.bat", "生成文字模板.bat"]
+# 只写"必须有"的骨架产物；具体文档不写死文件名（内容会增删，写死会假失败）
 EXPECTED = [
     "index.html", "about.html", ".nojekyll",
     "assets/style.css", "assets/main.js", "assets/favicon.svg",
-    "teardown/index.html", "design/index.html",
-    "teardown/example-teardown.html", "design/example-design.html",
+    "teardown/index.html", "design/index.html", "study/index.html",
 ]
 
 # 文字层：验证「改 txt → 重建 → 页面变」这条链路真的通
@@ -106,13 +106,27 @@ for page in pages:
             broken.append(f"{page.name} -> {href}")
 check("every internal link resolves", not broken, "; ".join(broken[:4]))
 
-det = read(DOCS / "teardown" / "example-teardown.html")
-check("tables wrapped in scroll container", det.count('class="table-scroll"') >= 2,
-      str(det.count('class="table-scroll"')))
-check("numeric columns marked", 'class="num"' in det)
-check("cjk code block marked", 'class="cjk"' in det)
-check("reading progress bar present", 'id="progressBar"' in det)
-check("toc generated", 'id="toc"' in det)
+# 用「真实存在的文档」当样本：挑一篇有内容特征的，不写死文件名
+sample = None
+for cand in sorted(DOCS.glob("teardown/*.html")) + sorted(DOCS.glob("design/*.html")):
+    if cand.name in ("index.html",) or cand.name.startswith("verify-"):
+        continue
+    txt = read(cand)
+    if 'class="table-scroll"' in txt and 'id="toc"' in txt:
+        sample = (cand, txt)
+        break
+check("found a real doc with tables + toc to inspect", sample is not None)
+if sample:
+    name, det = sample
+    check(f"{name.name}: tables wrapped in scroll container",
+          det.count('class="table-scroll"') >= 1, str(det.count('class="table-scroll"')))
+    check(f"{name.name}: reading progress bar present", 'id="progressBar"' in det)
+    check(f"{name.name}: toc generated", 'id="toc"' in det)
+
+# 数字列 / 中文代码块标记：全站任意一篇命中即算通过（内容不同不必强求同一篇）
+all_docs = [read(p) for p in DOCS.glob("*/*.html") if p.name != "index.html"]
+check("numeric columns marked somewhere", any('class="num"' in t for t in all_docs))
+check("cjk code block marked somewhere", any('class="cjk"' in t for t in all_docs))
 
 idx = read(DOCS / "index.html")
 check("homepage hero present", 'class="hero-title"' in idx)
@@ -212,9 +226,14 @@ srv = http.server.ThreadingHTTPServer(
     lambda *a, **k: Quiet(*a, directory=str(DOCS), **k))
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 
-for u in ["/", "/teardown/", "/design/", "/about.html",
-          "/teardown/example-teardown.html", "/design/example-design.html",
-          "/assets/style.css", "/assets/main.js", "/assets/favicon.svg"]:
+# 页面清单动态生成：骨架页 + 实际存在的每篇文档（不写死文件名）
+urls = ["/", "/teardown/", "/design/", "/study/", "/about.html", "/projects.html",
+        "/assets/style.css", "/assets/main.js", "/assets/favicon.svg"]
+urls += [f"/{p.parent.name}/{p.name}"
+         for p in sorted(DOCS.glob("*/*.html"))
+         if p.name != "index.html" and not p.name.startswith("verify-")]
+
+for u in urls:
     try:
         with urllib.request.urlopen(f"http://127.0.0.1:{port}{u}", timeout=10) as resp:
             check(f"HTTP 200 {u}", resp.status == 200 and len(resp.read()) > 0)

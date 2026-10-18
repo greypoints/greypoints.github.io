@@ -34,3 +34,7 @@ order: 1
 
 - 设计了基本游戏大循环，完成了 UI 逻辑与美术设计，填充了关卡中 note 内容
 - 作品展示：https://www.bilibili.com/video/BV1sr421s7Jk
+
+## Quake Mod 图
+
+- 作品展示：https://www.bilibili.com/video/BV14QR3BUEaz
