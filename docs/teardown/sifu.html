@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>《师父》（Sifu）关卡拆解 · 灰点</title>
+<meta name="description" content="灰点的个人作品集：游戏拆解案、策划案存档。">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="geo" aria-hidden="true"><i class="geo-dot gd-1"></i><i class="geo-dot gd-2"></i><i class="geo-dot gd-3"></i><i class="geo-dot gd-4"></i><i class="geo-dot gd-5"></i><i class="geo-dot gd-6"></i><i class="geo-dot gd-7"></i><i class="geo-line gl-1"></i><i class="geo-line gl-2"></i></div>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/"><b>GREYPOINT</b> <span>/ 灰点</span></a>
+    <nav class="nav-links"><a class="ln" href="/">首页</a><a class="ln on" href="/teardown/">拆解案</a><a class="ln" href="/design/">策划案</a><a class="ln" href="/study/">学习记录</a><a class="ln" href="/projects.html">项目</a><a class="ln" href="/about.html">关于</a></nav>
+  </div>
+</header>
+<div class="progress"><i id="progressBar"></i></div>
+<main class="detail">
+<aside class="toc" id="toc">
+  <div class="toc-h" id="tocToggle">目录</div>
+  <nav><a class="lv2" href="#_1">游戏介绍</a><a class="lv2" href="#_2">关卡特点</a><a class="lv2" href="#_3">夜店</a><a class="lv3" href="#_4">关卡结构</a><a class="lv3" href="#_6">流程分析</a><a class="lv3" href="#_7">空间设计</a></nav>
+</aside>
+<article class="doc">
+  <div class="doc-head">
+    <div class="doc-meta"><span>拆解案</span><span>4,045 字</span><span>约 10 分钟</span></div>
+    <h1>《师父》（Sifu）关卡拆解</h1>
+
+
+  </div>
+  <div class="doc-body"><h2 id="_1">游戏介绍</h2>
+<p>sifu是一款以中国功夫为主题的动作游戏，围绕主角、武道馆与复仇的故事展开<br />
+- 它最独特的地方在于死亡与重生的机制：游戏里允许玩家有限次死亡，死亡后角色年龄增长，并从死亡处直接重生，玩家需要在年龄超过上限之前通关；<br />
+- 除此之外比较独特的地方还有对boss的处决，正常流程打boss到破防是可以直接处决的，但是也可以选择不处决打多次破防则触发宽恕结局，而这意味着玩家需要对战斗有足够强的掌控，只有玩家对boss应对方式与战斗节奏掌控度够高，才有宽恕敌人的选项</p>
+<h2 id="_2">关卡特点</h2>
+<p>为了展示中国的文化元素，sifu选取了五行与现代建筑做融合，木-贫民窟；火-夜店；水-美术馆；金-塔楼（大厦）；土-静心堂</p>
+<p>关卡<strong>将五行主题与现代建筑结合</strong>，并做了更直白的带元素的场景如竹林，起火武馆，水边雪地等等让玩家穿越其中，强化玩家对关卡中五行元素的认识，而一些超现实场景的切换也更好展示意象、表现角色心理状态，便于展开叙事</p>
+<p>关卡结构上，大多数关卡都通过钥匙、单向门等机制<strong>建立区域之间的连接关系</strong>，在第一次探索时需要完整完成关卡流程，解锁捷径后，第二次探索则可以跳过一部分流程<br />
+    这样设计让首次探索具有一定的路线组织与探索过程，也让后续多周目的探索获得效率提高的奖励</p>
+<p>关卡设计需求：以连续战斗为主要内容，同时穿插线索收集、路线探索和环境交互，使玩家在战斗之外仍有探索目标。<br />
+关卡内元素：<br />
+多可破坏物如屏风、桌椅：用于增加了战斗中的环境互动，也增强视觉与动作反馈<br />
+武器，这一章的boss使用武器为棍，所以在特殊节点会更多放置棍类武器，帮助玩家应对道中的敌人，除此之外还有可投掷用的瓶子</p>
+<h2 id="_3">夜店</h2>
+<p>接下来我们一起看看关卡设计中的细节<br />
+这里选取我重来最多次的“夜店”，对于“二十岁进夜店六十岁出”我早有耳闻，终于是切身体验了一把，证明它有较高的战斗难度，而重来多次让我对空间回环结构的设计有充足的体验</p>
+<p>这一章节以火为主题，取火毁灭、混乱的意向构建场景，强化混乱躁动的氛围<br />
+夜店场景多用亮蓝色灯光辅以其对比色暗红色灯光；武馆场景则基本为亮橙色火光</p>
+<h3 id="_4">关卡结构</h3>
+<p>简图</p>
+<figure><img alt="" src="/assets/img/sifu/b6839ee4db01fa9ba2a95dc97de5cace_720.png" /></figure>
+<p>分上下两层的回环结构，以舞池为核心空间，完成舞池战都后进入舞池二楼区域，完成后打开捷径回到舞池，再次出发，玩家绕回起点，最后回到舞池boss战</p>
+<h4 id="_5">场景穿越与空间复用</h4>
+<p>让这一回环自然的主要手段是<strong>场景穿越，同一空间状态切换。</strong> 让玩家在两个拥有相同结构但不同风格的场景中穿越，且是用门分割开的段落单向穿越，不能返回，玩家会保留方向感，但是会削弱玩家对空间连续性的判断，因此在出现重复结构时会更惊讶<br />
+主要动线：蓝色线开始会出现场景穿越</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116103856.png" /></figure>
+<p>还有一些游戏会用到<strong>场景穿越</strong>这一玩法，但略有不同：<br />
+- 第一种：玩家主动切换，如泰坦陨落2、耻辱2，主要目的是通过改变场景状态完成解谜<br />
+- 第二种：通过关卡流程或叙事推进，如sifu、P.T.、Control，主要目的是为叙事服务</p>
+<p>通过穿越，原本的障碍获得新的连接方式，玩家不知不觉中接近起点，既是关卡结构的回环，也是情绪的收束<br />
+再次到达门口时，复用同一套结构，在情绪上却有递进关系</p>
+<h3 id="_6">流程分析</h3>
+<p>开场惯用的宽画幅，主角从左下角入画<br />
+<strong>利用明暗对比引导玩家进入关卡</strong><br />
+入口处近景较暗，远处则存在明显的光源，形成<strong>明暗对比</strong>。利用<strong>视觉显著性</strong>，将玩家的注意力引向前方的亮部，使其更容易识别前进方向。在玩家刚进入关卡、尚未建立空间认知时，这种视觉引导可以降低识别路线的成本，让玩家自然地向关卡内部推进。<br />
+使用显眼文字招牌告知玩家地点，帮助玩家建立初步的地点认知</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261114015259.png" /></figure>
+<p>完成门口战斗后台阶向下<br />
+多数时候以地平线为基准，向下的空间会塑造紧张、压抑感；而向上则有抬升的放松感<br />
+这里用在开头奠定氛围</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261114032718.png" /></figure>
+<p>战斗完通过走廊降低操作压力，同时用黑暗环境铺垫紧张感</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261114144847.png" /></figure>
+<p>推开门看见大屏幕的“火”，强化关卡的火元素主题<br />
+紧接着“唯我独尊”表明这一关的元素，表明反派角色的性格与立场</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261114145210.png" /></figure>
+<p>进门视角，空间被不同颜色的光分隔开，正前方亮蓝色占据主导，四周暗红色辅助，同时透过漏窗能看到二层空间<br />
+用高亮度、频繁闪烁的灯光与屏幕形成<strong>视觉中心</strong>，周围用灯条也将视线引向舞池<br />
+    舞池不仅是玩家首次遭遇大规模战斗的区域，也是后续路线多次经过或观察到的核心空间。因此，设计师通过强化这一空间的视觉表现，让玩家优先注意并记住这个空间地标，为玩家后续判断自身位置与关卡进程提供参照。<br />
+且在沙发周围战斗时主要背景颜色为暗红色，在舞池中战斗时以蓝色为主，不同区域的色彩差异使玩家能够通过环境色调区分当前所处的战斗空间。</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261114145219.png" /></figure>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261115024906.png" /></figure>
+<p>靠近门口时敌人主动破门出现，玩家被动应战，打断了玩家原本的移动节奏<br />
+在精英战后延续了战斗压力</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261115025356.png" /></figure>
+<p>与舞池前的开阔空间搭配可翻越障碍做区分，这里采用更狭窄的空间布局并保留可翻越障碍。<strong>狭窄空间限制了玩家与敌人可以拉开的距离，也减少了玩家躲避攻击的方向和前后受击的脱离办法。</strong> 使用可翻越障碍可以迅速脱离敌人的攻击范围，提供了重新调整站位的方式<br />
+通过变化空间尺度与障碍物配置促使玩家变化战斗方式，避免玩家始终使用相同的战斗策略。在开阔处可以通过移动甩开敌人， 狭窄处可翻越障碍的优先级则会更高，因为使用可翻越障碍拉扯敌人会让战斗更轻松</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261115025214.png" /></figure>
+<p>上楼梯喘息后小规模战斗<br />
+用屏幕自动播放完成叙事内容，放出本章节boss剪影，提前让玩家认识其外观，并为后续BOSS战建立视觉预期</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261115025524.png" /></figure>
+<p>光线亮度上右强左弱，利用明暗对比引导玩家先向右注意到小怪与武器<br />
+然后再进入主路线，尽可能不回头走重复道路</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116081921.png" /></figure>
+<figure><img alt="354" src="/assets/img/sifu/Pasted%20image%2020261116081956.png" /></figure>
+<p>这里通过窗户能再次看到舞池，建立当前区域与舞池之间的位置关系<br />
+通过熟悉的场景再现强调了舞池的重要地位，并帮助玩家判断当前位置。重复出现的地标也为玩家提供了阶段性的记忆锚点，使其能够将此前经过的区域组织成相对完整的探索段落，并逐步建立对关卡空间结构的认识。</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116082111.png" /></figure>
+<p>两个壮汉精英怪作为节奏小高峰<br />
+用颜色分割空间<br />
+屏风在远处遮挡视线，且与分隔墙有距离呼应，远观时空间被分隔成多个相对独立的小空间区块<br />
+实际进入战斗很容易被打破，原本被分割的空间变得开阔，便于玩家拉开距离迎战精英怪</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116084814.png" /></figure>
+<p>打完精英怪用短走廊降低战斗压力，然后由暗到亮继续拉起情绪，开门小规模战斗持续拉起战斗强度与情绪<br />
+    sifu的战斗强度与战斗时的操作密度都很高，完成一场战斗需要适当降低玩家的操作压力，走廊可以分隔主要战斗区域，承上启下，休息并铺垫下一场战斗，也把进入下一场战斗的时机交给玩家，让玩家拥有掌控感</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116090423.png" /></figure>
+<p>纯蓝色灯光，与舞池初战建立视觉联系<br />
+使用了框架门，让玩家能看见门后的敌人，建立玩家对战斗的心理预设</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116090745.png" /></figure>
+<p>将敌人放在护栏边背对玩家，给玩家偷袭的机会，通过偷袭动作意外打破护栏，很巧妙地诱导玩家主动创造下去的入口<br />
+将战斗行为转化为空间变化，让战斗成为推动关卡探索的手段<br />
+同时护栏下面是敌人的战斗场景，通过声音与动作吸引玩家向下移动</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116092615.png" /></figure>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116092855.png" /></figure>
+<p>战斗结束秒穿越场景，相似的正方结构但是多了一个通道<br />
+这里是第一次场景穿越，需要空间结构尽可能简单，所以选取了四面墙的八角笼结构，降低玩家理解场景变化的难度，出现唯一出口，确保玩家不会丢失目标<br />
+由于前面大屏幕出现过相似的空间意象，不会让玩家感觉突兀，降低陌生感<br />
+使用新场景、火焰与危险的暖色调强化危险、混乱的氛围，让玩家情绪保持紧张，穿过通道进入小boss战</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116093017.png" /></figure>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116093244.png" /></figure>
+<p>这一段关卡节奏简图<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116093410.png" /></figure><br />
+完成精英战后穿越蓝色场景，情绪回落<br />
+紫色灯光照的更亮更显眼的部分放置主线，较暗的门则为回到舞池的捷径。利用亮度差异区分不同路线，玩家可以优先注意到更重要的方向</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116093632.png" /></figure>
+<p>使用较暗的灯光让玩家保持冷静，暗示这里不需要直接战斗，可以用不战斗的方式通过<br />
+提供了更多样的通关方式<br />
+重要人物周围用光亮部分照出，让人物轮廓从背景中突出，用背光体现其危险性，强烈的明暗对比塑造了视觉中心</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116094050.png" /></figure>
+<p>进门从纯黑暗的长走廊到远处亮起橙黄色光芒，在玩家没有感知的情况下完成了场景穿越<br />
+而且在前方放一个boss远去的背影做目标，调动起玩家的情绪</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116094328.png" /></figure>
+<p>关门，场景亮起遭遇战斗，玩家被动应战<br />
+通过高处的角色告诉玩家这是一场试炼，并透露后续的试炼内容，让玩家对后续流程有预期</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116094850.png" /></figure>
+<p>再次通过全黑长走廊穿越场景，灯光以前进的方向依次亮起<br />
+这里是遭遇战后的喘息，回到夜店的冷色调，但是频繁变化的动态场景不会让玩家过分冷静<br />
+灯条作为场景中明显的线元素，右边缺口且上边向右倾斜，右侧留下明显的视觉缺口，与走廊尽头的右转形成呼应</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116095056.png" /></figure>
+<p>一个转角出现boss剪影，开门场景穿越回武馆紧接着第二场试炼<br />
+多次出现的boss剪影充分调动玩家情绪，持续强化BOSS的存在感，为boss战蓄势</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116095258.png" /></figure>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116095453.png" /></figure>
+<p><strong>在三次试炼/三个挑战的最后一个玩家会有更多急切感，此时适当变奏是个不错的选择</strong><br />
+这里没有再穿越场景，让玩家建立对武馆燃烧场景的熟悉<br />
+使用文字招牌告诉玩家地点，这里与开头的夜店用于建立初步认识不同，是在玩家已经经历过多次场景变化后，确认当前地点。也是从看到招牌开始发现回到熟悉的结构，更快建立玩家对燃烧场景的适应<br />
+使用火焰与暖色调使场景呈现明显的破坏与危险意向，让玩家保持紧张</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116100310.png" /></figure>
+<p>回到原舞池的地点，现在是练武场，开始第三场试炼<br />
+<strong>在相似的空间结构处引战不同的敌人，情绪上会有递进</strong></p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116100703.png" /></figure>
+<p>穿过练武场中间的门，喘息后进入boss战<br />
+按照本游戏惯例二阶段回切换一次场景，更好的呼应五行主题元素<br />
+而在这个章节中，主要运用了火元素，二阶段燃烧的动态与更开阔的背景，扩大了场景的视觉规模，让boss呈现更强的仪式感和终局感</p>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116101140.png" /></figure>
+<figure><img alt="" src="/assets/img/sifu/Pasted%20image%2020261116101109.png" /></figure>
+<h3 id="_7">空间设计</h3>
+<ol>
+<li><strong>核心空间与地标</strong>：舞池作为关卡核心空间，反复出现，为玩家提供空间参照。</li>
+<li><strong>空间尺度变化</strong>：通过开阔空间与狭窄空间的切换，改变玩家的战斗策略。</li>
+<li><strong>垂直空间与路线连接</strong>：利用楼梯、护栏和捷径连接上下层空间。走廊可以分隔主要战斗区域，承上启下，休息并铺垫下一场战斗，也把进入下一场战斗的时机交给玩家，让玩家拥有掌控感</li>
+<li><strong>过渡空间与节奏控制</strong>：上下台阶、短走廊提供战斗间的操作缓冲，较长的走廊则可以利用光线、遮挡和目标预告建立期待。</li>
+<li><strong>场景穿越与空间复用</strong>：通过相似结构和不同场景状态，让玩家在熟悉与陌生之间切换。</li>
+</ol></div>
+  <div class="doc-foot">
+    <div><a class="ln" href="no-rest-shallow.html">← 《恶意不息》章节一：浅滩关卡拆解</a></div>
+    <a class="back ln" href="./">TEARDOWN 列表 ↑</a>
+    <div></div>
+  </div>
+</article>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand"><b>GREYPOINT</b> / 灰点</div>
+    <div class="foot-meta">
+      <span>18272287614@163.com</span>
+      <span>微信：Grey_spot</span>
+      <span>更新于 2026-11-19</span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/main.js" defer></script>
+</body>
+</html>
