@@ -34,3 +34,7 @@ order: 1
 
 - 设计了基本游戏大循环，完成了 UI 逻辑与美术设计，填充了关卡中 note 内容
 - 作品展示：https://www.bilibili.com/video/BV1sr421s7Jk
+
+## 雨夜横丁关卡 Demo
+
+[演示视频与设计文档](/rainy-night-alley.html)

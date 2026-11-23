@@ -1,6 +1,6 @@
 ---
 title: 雨夜横丁关卡 Demo 设计文档
-date: 2026-11-23
+order: 3
 ---
 
 <video controls playsinline preload="metadata" width="100%" src="/assets/img/rainy-night-alley/demo.mp4"></video>
