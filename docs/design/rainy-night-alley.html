@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>雨夜横丁关卡 Demo 设计文档 · 灰点</title>
+<meta name="description" content="灰点的个人作品集：游戏拆解案、策划案存档。">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="geo" aria-hidden="true"><i class="geo-dot gd-1"></i><i class="geo-dot gd-2"></i><i class="geo-dot gd-3"></i><i class="geo-dot gd-4"></i><i class="geo-dot gd-5"></i><i class="geo-dot gd-6"></i><i class="geo-dot gd-7"></i><i class="geo-line gl-1"></i><i class="geo-line gl-2"></i></div>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/"><b>GREYPOINT</b> <span>/ 灰点</span></a>
+    <nav class="nav-links"><a class="ln" href="/">首页</a><a class="ln" href="/teardown/">拆解案</a><a class="ln on" href="/design/">策划案</a><a class="ln" href="/study/">学习记录</a><a class="ln" href="/projects.html">项目</a><a class="ln" href="/about.html">关于</a></nav>
+  </div>
+</header>
+<div class="progress"><i id="progressBar"></i></div>
+<main class="detail">
+<aside class="toc" id="toc">
+  <div class="toc-h" id="tocToggle">目录</div>
+  <nav><a class="lv2" href="#_1">设计概述</a><a class="lv2" href="#_2">参考图</a><a class="lv2" href="#_3">实际流程</a><a class="lv3" href="#_4">游戏节奏图</a><a class="lv3" href="#_5">流程图</a><a class="lv3" href="#_6">结构图</a><a class="lv3" href="#_7">动线演示</a><a class="lv2" href="#_8">重要节点</a><a class="lv2" href="#_9">对话、收集物配表</a><a class="lv2" href="#ue">UE 配置索引</a></nav>
+</aside>
+<article class="doc">
+  <div class="doc-head">
+    <div class="doc-meta"><span>策划案</span><span>2026-11-23</span><span>1,641 字</span><span>约 4 分钟</span></div>
+    <h1>雨夜横丁关卡 Demo 设计文档</h1>
+
+
+  </div>
+  <div class="doc-body"><video controls playsinline preload="metadata" width="100%" src="/assets/img/rainy-night-alley/demo.mp4"></video>
+
+<h2 id="_1">设计概述</h2>
+<p>背景设定：胡同中的酒吧时常传来异响，且附近有少量失踪的案例，玩家作为探员需要去探索酒吧中的秘密</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>预期体验</th>
+<th>调查发现机关与额外空间 → 进入地下室探索与战斗 → 击败敌人揭露阴谋</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心动作</td>
+<td>调查、找路、拿钥匙、战斗</td>
+</tr>
+<tr>
+<td>空间结构</td>
+<td>酒吧大厅（地表）→ 中央酿造区 → 储藏区（3/2/1F）→ 处理区（1/2F）→ 数控区（1/2F）→ 隐藏门 → 酒吧走廊</td>
+</tr>
+<tr>
+<td>主要区域</td>
+<td>酒吧大厅、中央酿造区、储藏区、处理区、数控区</td>
+</tr>
+<tr>
+<td>节奏</td>
+<td>调查（缓）→ 下行探索（紧）→ 取钥匙（小高潮）→ 折返（回收）→ 数控室战斗（高潮） → 回到酒吧（释放）</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="_2">参考图</h2>
+<figure><img alt="581" src="/assets/img/rainy-night-alley/Pasted%20image%2020261120144343.png" /></figure><figure><img alt="577" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123203329.png" /></figure>
+<h2 id="_3">实际流程</h2>
+<p>流程描述：与包间里的线人完成对话，获得线索与地下室钥匙，然后从厕所隔间进入地下室中央区，从中央二楼进入储藏区三楼，然后依次完成储藏区二楼和一楼探索，从储藏区一楼进入处理室，上到处理室二楼找到数控室钥匙，然后穿过储藏区二楼回到中央区，使用钥匙进入数控区，从数控区二楼开启隐藏门回到酒吧走廊</p>
+<h3 id="_4">游戏节奏图</h3>
+<p>通过以下方式实现波浪式递增的游戏节奏<br />
+1穿插战斗与探索<br />
+2敌人数量与压力增加<br />
+3空间逐渐狭窄，亮暗对比增强</p>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123204219.png" /></figure>
+<h3 id="_5">流程图</h3>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123202127.png" /></figure>
+<h3 id="_6">结构图</h3>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123101014.png" /></figure>
+<h3 id="_7">动线演示</h3>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123101900.png" /></figure><figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123112616.png" /></figure>
+<h2 id="_8">重要节点</h2>
+<ul>
+<li>胡同用克制的冷色夜光，暖色入口和台面帮助定位。保留街边店面与连续墙面的空间关系。</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123214415.png" /></figure>
+<ul>
+<li>用书柜/酒柜伪装隐藏起来的暗门，玩家会从另一侧回到这个场景，隐藏出口管理预期</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123214524.png" /></figure>
+<ul>
+<li>初入中央区，第一眼看见敌人与收集物 <figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123215251.png" /></figure></li>
+<li>前进发现脚底的敌人，回头发现剩余敌人</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123215432.png" /></figure>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123215645.png" /></figure>
+<ul>
+<li>预期路线用更亮的灯光引导，另一条路线能看到较暗的障碍物</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123215737.png" /></figure>
+<ul>
+<li>较近处用收集物吸引注意力，远处能看到门牌但发现是锁住状态</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123215943.png" /></figure>
+<ul>
+<li>进门能发现明显战斗点，贴近发现额外敌人创造意外</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123220151.png" /></figure>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123220334.png" /></figure>
+<ul>
+<li>用收集物吸引玩家深入，再回头能提前发现底层的敌人</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123220557.png" /></figure>
+<ul>
+<li>升降台处能发现底层的敌人，同时看见远处的收集物，与门一起建立第二目标</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123224944.png" /></figure>
+<ul>
+<li>利用光影塑造压迫感与紧张感</li>
+</ul>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123221554.png" /></figure>
+<h2 id="_9">对话、收集物配表</h2>
+<figure><img alt="" src="/assets/img/rainy-night-alley/Pasted%20image%2020261123194451.png" /></figure>
+<h2 id="ue">UE 配置索引</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>要修改的内容</th>
+<th>在哪里操作</th>
+<th>联动检查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>灰盒空间与路标</td>
+<td>原图 <code>Template_Default</code>，用 Blockout Tools 修改几何。分叉路标用 <code>BP_BlockAnnotation</code>。</td>
+<td>地面与地下使用同一张主图。更新楼层后同步地图标注、门和触发范围。</td>
+</tr>
+<tr>
+<td>台词、选项和停留时间</td>
+<td><code>Content/DialogueCSV/YokochoStory.csv</code>。用 <code>Id</code>、<code>Next</code> 串接，<code>Shot</code>、<code>Transition</code>、<code>Blend</code>、<code>Hold</code>、<code>Auto</code> 控制演出。</td>
+<td><code>Choice</code> 的 <code>Id</code> 指向所属对话节点。资产的 <code>Start</code> 对应首节点。</td>
+</tr>
+<tr>
+<td>NPC 与镜头</td>
+<td>小川、包间客人用 <code>BP_DialogueNPC</code>。在 Details 改角色名、待机与 <code>Shots</code>，镜头在 Cine Camera 或 Sequencer 调整。</td>
+<td>镜头 ID 与 CSV 一致，从每个分支退出都要检查镜头和行动恢复。</td>
+</tr>
+<tr>
+<td>大厅短句与录音</td>
+<td><code>BP_DialoguePoint</code>。大厅说话点开启 <code>Show As Bark</code>，录音按原有节点可重听。</td>
+<td>挪动模型后检查说话点距离、朝向与台面遮挡。</td>
+</tr>
+<tr>
+<td>证据与钥匙</td>
+<td><code>BP_StoryNote</code> 或 <code>BP_KeyPickup</code>。Details 的 <code>Pickup Label</code> 管动作，<code>Item Name</code> 管取得后的名称。</td>
+<td>工服实例需同时配置 <code>Key Id = Brewery.StallKey</code> 和 <code>Grants Key</code>，拾取正文来自 <code>Guest.Coat</code>。数控钥匙的 ID 与数控门一致。</td>
+</tr>
+<tr>
+<td>数控门与数控台</td>
+<td>门实例的 <code>Locked Label</code> 对应 <code>Control.Locked</code>。终端的 <code>Blocked Text</code> 与 <code>Required Defeated</code> 对应警戒反馈与指定值守。</td>
+<td>改表里的这两条文本时，同步 Details。数控台引用 <code>Terminal.Start</code>。</td>
+</tr>
+<tr>
+<td>暗门与结尾</td>
+<td>暗门实例 <code>BP_MechanismDoor_C_4</code> 的 <code>Open Trigger</code> 指向大纲中的「暗门｜打开后的结尾」。选中该触发器改 <code>Trigger Text</code>、<code>Trigger Text Seconds</code> 与退场对象。</td>
+<td>暗门需要 <code>Brewery.FinalRecord</code>。两个旧靠近触发盒的碰撞都已关闭，结尾触发器由门到位事件调用。</td>
+</tr>
+<tr>
+<td>机关门与升降平台</td>
+<td><code>BP_MechanismDoor</code> 和 <code>BP_PlatformCall</code>。在 Details 调门板尺寸、运动方式、允许侧、旋转轴、停靠端点与到站行为。</td>
+<td>改尺寸优先用 <code>Leaf Size</code>。平台护栏附到随门板移动的组件，两个呼叫点指向相应端点。</td>
+</tr>
+</tbody>
+</table></div></div>
+  <div class="doc-foot">
+    <div><a class="ln" href="card-road.html">← 《卡牌公路》设计文档</a></div>
+    <a class="back ln" href="./">DESIGN DOC 列表 ↑</a>
+    <div></div>
+  </div>
+</article>
+</main>
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand"><b>GREYPOINT</b> / 灰点</div>
+    <div class="foot-meta">
+      <span>18272287614@163.com</span>
+      <span>微信：Grey_spot</span>
+      <span>更新于 2026-11-23</span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/main.js" defer></script>
+</body>
+</html>
